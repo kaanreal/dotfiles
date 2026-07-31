@@ -1,4 +1,4 @@
-{ config, pkgs, lib, ... }:
+{ config, pkgs, lib, nix-cachyos-kernel, ... }:
 
 {
   imports = [
@@ -76,6 +76,19 @@ services.flatpak.enable = true;
   };
 
   nixpkgs.config.allowUnfree = true;
+
+  # CachyOS kernel, zen4-optimized for the Ryzen 7 7800X3D.
+  # Uses the caller's nixpkgs (overlays.default), so the rest of the system
+  # is unaffected; the kernel itself is compiled locally on first rebuild.
+  nixpkgs.overlays = [ nix-cachyos-kernel.overlays.default ];
+  boot.kernelPackages = pkgs.cachyosKernels.linuxPackages-cachyos-latest-zen4;
+
+  # Binary cache for the CachyOS kernel flake
+  nix.settings.substituters = [ "https://attic.xuyh0120.win/lantian" ];
+  nix.settings.trusted-public-keys = [ "lantian:EeAUQ+W+6r7EtwnmYjeVwx5kOGEBpjlBfPlzGlTNvHc=" ];
+
+  # Cap compile parallelism (physical cores) so kernel builds fit in 15GB RAM
+  nix.settings.cores = 8;
 
   system.stateVersion = "26.05";
 }

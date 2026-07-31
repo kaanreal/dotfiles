@@ -15,6 +15,9 @@
       url = "github:caelestia-dots/caelestia";
       flake = false;
     };
+
+    # CachyOS kernel (removed from nixpkgs; provided by xddxdd's flake)
+    nix-cachyos-kernel.url = "github:xddxdd/nix-cachyos-kernel";
   };
 
   outputs = {
@@ -22,10 +25,14 @@
     home-manager,
     caelestia-shell,
     caelestia-dots,
+    nix-cachyos-kernel,
     ...
   }: {
     nixosConfigurations.nixos = nixpkgs.lib.nixosSystem {
       system = "x86_64-linux";
+      specialArgs = {
+        inherit nix-cachyos-kernel;
+      };
       modules = [
         ./hosts/nixos
         home-manager.nixosModules.home-manager
