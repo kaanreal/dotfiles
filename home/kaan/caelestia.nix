@@ -84,6 +84,7 @@ in
     cava
     kitty
     gh
+    gnome-software
     # quickshell (qs) needed by the caelestia CLI to launch/IPC the shell
     qs
   ];

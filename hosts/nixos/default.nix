@@ -43,8 +43,8 @@
   };
   console.keyMap = "de";
 
-  services.printing.enable = true;
-
+  services.printing.enable = true;  
+  
   users.users.kaan = {
     isNormalUser = true;
     description = "kaan";
