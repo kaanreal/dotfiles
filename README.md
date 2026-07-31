@@ -60,9 +60,10 @@ A hand-rolled, fully reproducible NixOS + home-manager setup running the
   `rebuild` bumps it by one, tagging `nixos-<n>` and pushing it. The number
   is independent of Nix generations, so it always counts up and cleanup can
   never reset it.
-- `cleanup` deletes all old Nix generations and all old `nixos-*` tags but
-  keeps the current generation, the current tag and the `.version` counter —
-  the next rebuild just continues from where you left off.
+- `cleanup` deletes all old Nix generations and prunes old `nixos-*` tags
+  locally, keeping only the newest. GitHub keeps every tag forever. The
+  `.version` counter is untouched, so the next rebuild just continues from
+  where you left off.
 - Every `switch` creates a **generation** — a bootable snapshot. Keep a few
   for safety, clean the rest with `cleanup`.
 
