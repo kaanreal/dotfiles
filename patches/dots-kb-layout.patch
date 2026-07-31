@@ -12,7 +12,7 @@
 --- a/hypr/variables.lua
 +++ b/hypr/variables.lua
 @@ -11,6 +11,7 @@
-     editor                     = "codium",
+     editor                     = "co",
      fileExplorer               = "thunar",
      audioSettings              = "pavucontrol",
 +    kbLayout                = "us",

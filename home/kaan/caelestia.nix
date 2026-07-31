@@ -88,6 +88,10 @@ in
     gnome-software
     jamesdsp
     vscode
+    vim
+    neovim
+    vimPlugins.LazyVim
+    vesktop
     # quickshell (qs) needed by the caelestia CLI to launch/IPC the shell
     qs
   ];
