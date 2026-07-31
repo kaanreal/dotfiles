@@ -135,9 +135,12 @@ in
     ".config/caelestia/user-config.fish".text = ''
       # Caelestia user fish config
 
-      # Rebuild NixOS, then commit + push the config with a cozy message.
+      # Rebuild NixOS, bump the version counter, then commit + tag + push.
+      # The version lives in .version, so every successful rebuild always
+      # moves to the next number and cleanup can never reset it.
       function rebuild
           set -l repo $HOME/nix-config
+          set -l verfile $repo/.version
 
           sudo nixos-rebuild switch --flake /etc/nixos
           or begin
@@ -145,28 +148,54 @@ in
               return 1
           end
 
+          set -l ver 0
+          if test -f $verfile
+              set ver (string trim (cat $verfile))
+          end
+          set -l next (math "$ver + 1")
+          echo $next > $verfile
+
           git -C $repo add -A
 
-          if not git -C $repo diff --cached --quiet
-              set -l emojis '🌸' '🌙' '☕' '🍃' '🧁' '🕯️' '🌷' '✨' '🫧'
-              set -l emoji $emojis[(random 1 (count $emojis))]
-              set -l msg "$emoji Rebuild "(date +%F\ %H:%M | string join ' ')
-              set -l body (git -C $repo diff --cached --stat | string join \n)
-              git -C $repo commit -m "$msg" -m "$body"
+          set -l emojis '🌸' '🌙' '☕' '🍃' '🧁' '🕯️' '🌷' '✨' '🫧'
+          set -l emoji $emojis[(random 1 (count $emojis))]
+          set -l msg "$emoji Rebuild "(date +%F\ %H:%M | string join ' ')
+          set -l body (git -C $repo diff --cached --stat | string join \n)
+          git -C $repo commit -m "$msg" -m "$body"
 
-              set -l gen (readlink /nix/var/nix/profiles/system | grep -oE '[0-9]+' | tail -1)
-              if test -n "$gen"
-                  git -C $repo tag -a "nixos-$gen" -m "🌸 $msg"
-              end
+          git -C $repo tag -a "nixos-$next" -m "🌱 nixos-$next"
+          echo "🌱 tagged nixos-$next"
 
-              if git -C $repo remote | grep -q .
-                  git -C $repo push --follow-tags
-              else
-                  echo "🕊️ no git remote set — committed locally, skipped push"
-              end
+          if git -C $repo remote | grep -q .
+              git -C $repo push --follow-tags
+              or echo "⚠️ committed + tagged locally, but push failed"
           else
-              echo "🌸 nothing changed — config already up to date"
+              echo "🕊️ no git remote set — committed locally, skipped push"
           end
+      end
+
+      # Delete old Nix generations and all old tags. Keeps the current
+      # generation, the current tag and the version counter, so the number
+      # stays the same and the next rebuild continues from there.
+      function cleanup
+          set -l repo $HOME/nix-config
+          set -l verfile $repo/.version
+
+          sudo nix-collect-garbage -d
+
+          set -l ver 0
+          if test -f $verfile
+              set ver (string trim (cat $verfile))
+          end
+          set -l keep "nixos-$ver"
+          set -l tags (git -C $repo tag -l 'nixos-*' | string match -v $keep)
+          if test -n "$tags"
+              git -C $repo tag -d $tags
+          end
+          if git -C $repo remote | grep -q .
+              git -C $repo push origin --delete $tags; or true
+          end
+          echo "🧹 cleaned up — next rebuild will be nixos-"(math "$ver + 1")
       end
     '';
   };
