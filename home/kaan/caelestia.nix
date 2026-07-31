@@ -174,9 +174,9 @@ in
           end
       end
 
-      # Delete old Nix generations and all old tags. Keeps the current
-      # generation, the current tag and the version counter, so the number
-      # stays the same and the next rebuild continues from there.
+      # Delete old Nix generations and old local tags. GitHub keeps every tag
+      # forever; locally we keep only the newest (nixos-$ver). The version
+      # counter is untouched, so the next rebuild continues from there.
       function cleanup
           set -l repo $HOME/nix-config
           set -l verfile $repo/.version
@@ -192,10 +192,7 @@ in
           if test -n "$tags"
               git -C $repo tag -d $tags
           end
-          if git -C $repo remote | grep -q .
-              git -C $repo push origin --delete $tags; or true
-          end
-          echo "🧹 cleaned up — next rebuild will be nixos-"(math "$ver + 1")
+          echo "🧹 cleaned up — GitHub keeps all tags, local keeps nixos-$ver, next rebuild is nixos-"(math "$ver + 1")
       end
     '';
   };
