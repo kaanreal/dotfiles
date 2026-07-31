@@ -8,6 +8,7 @@
     ../../modules/hyprland.nix
     ../../modules/caelestia.nix
     ../../modules/tailscale.nix
+    ../../modules/flatpak.nix
   ];
 
   # Bootloader
