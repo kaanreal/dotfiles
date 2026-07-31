@@ -10,4 +10,24 @@
   };
 
   services.xserver.videoDrivers = [ "nvidia" ];
+
+  # Lock the graphics clock to avoid clock-turbo stutter (NVIDIA on Wayland).
+  # Runs as root at boot; reset anytime with `nvidia-smi -rgc`.
+  systemd.services.nvidia-clocks = {
+    description = "Lock NVIDIA graphics clock for stable frame pacing";
+    after = [ "display-manager.service" ];
+    wantedBy = [ "graphical.target" ];
+    serviceConfig = {
+      Type = "oneshot";
+      RemainAfterExit = true;
+    };
+    script = ''
+      ${config.hardware.nvidia.package.bin}/bin/nvidia-smi -pm 1
+      for i in 1 2 3 4 5; do
+        ${config.hardware.nvidia.package.bin}/bin/nvidia-smi -lgc 1550,1550 && break
+        sleep 2
+      done
+      ${config.hardware.nvidia.package.bin}/bin/nvidia-smi --query-gpu=clocks.gr --format=csv,noheader
+    '';
+  };
 }

@@ -7,6 +7,7 @@
     ../../modules/gpu.nix
     ../../modules/hyprland.nix
     ../../modules/caelestia.nix
+    ../../modules/tailscale.nix
   ];
 
   # Bootloader
