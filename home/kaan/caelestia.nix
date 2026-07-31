@@ -86,6 +86,7 @@ in
     gh
     gnome-software
     jamesdsp
+    vscode
     # quickshell (qs) needed by the caelestia CLI to launch/IPC the shell
     qs
   ];
