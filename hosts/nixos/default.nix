@@ -12,6 +12,23 @@
 
 services.flatpak.enable = true;
 
+  # Windows SSD (Samsung 990 PRO) mounted at boot
+  # ntfs-3g (FUSE) instead of ntfs3: more forgiving of dirty/hibernated volumes.
+  fileSystems."/mnt/windows" = {
+    device = "/dev/disk/by-uuid/34D6E186D6E148A6";
+    fsType = "ntfs-3g";
+    options = [
+      "nofail"
+      "rw"
+      "uid=1000"
+      "gid=100"
+      "umask=022"
+    ];
+  };
+  environment.systemPackages = with pkgs; [
+    ntfs3g
+  ];
+
   # Bootloader
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
