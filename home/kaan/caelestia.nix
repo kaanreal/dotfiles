@@ -85,6 +85,7 @@ in
     kitty
     gh
     gnome-software
+    jamesdsp
     # quickshell (qs) needed by the caelestia CLI to launch/IPC the shell
     qs
   ];
