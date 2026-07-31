@@ -148,8 +148,10 @@ in
     # User override files (editable, survive rebuilds)
     ".config/caelestia/hypr-vars.lua".text = ''
       return {
-        kbLayout    = "de",
-        cursorTheme = "Bibata-Modern-Classic",
+        kbLayout     = "de",
+        cursorTheme  = "Bibata-Modern-Classic",
+        fileExplorer = "nautilus",
+        terminal     = "kitty",
       }
     '';
     ".config/caelestia/hypr-user.lua".text = ''
