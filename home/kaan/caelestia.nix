@@ -161,11 +161,11 @@ in
           scale    = 1,
       })
 
-      -- Mouse: flat profile = constant speed, no acceleration
+      -- Mouse: no acceleration (Hyprland >= 0.55: accel_speed was removed,
+      -- force_no_accel is the replacement)
       hl.config({
           input = {
-              accel_profile = "flat",
-              accel_speed   = 0,
+              force_no_accel = true,
           },
       })
 
