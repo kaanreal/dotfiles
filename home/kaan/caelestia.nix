@@ -75,6 +75,7 @@ in
     ripgrep
     jq
     # Random stuff
+    bibata-cursors
     opencode
     google-chrome
     tailscale
@@ -119,7 +120,7 @@ in
     ".config/caelestia/hypr-vars.lua".text = ''
       return {
         kbLayout    = "de",
-        cursorTheme = "Adwaita",
+        cursorTheme = "Bibata-Modern-Classic",
       }
     '';
     ".config/caelestia/hypr-user.lua".text = ''
