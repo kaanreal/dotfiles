@@ -53,7 +53,8 @@ services.flatpak.enable = true;
 
   # X11/wayland session setup
   services.xserver.enable = true;
-  services.displayManager.gdm.enable = true;
+  services.displayManager.gdm.enable = false;
+  services.displayManager.ly.enable = true;
   services.desktopManager.gnome.enable = true;
   services.xserver.xkb = {
     layout = "de";
