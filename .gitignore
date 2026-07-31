@@ -1,0 +1,12 @@
+# nix build outputs
+result
+result-*
+
+# direnv
+.direnv
+.envrc
+
+# editor / OS junk
+*.swp
+*~
+.DS_Store
