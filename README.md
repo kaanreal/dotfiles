@@ -38,11 +38,11 @@ A hand-rolled, fully reproducible NixOS + home-manager setup running the
 
 | Task | Command |
 | --- | --- |
-| 🛠️ **rebuild** | `sudo nixos-rebuild switch --flake /etc/nixos` |
-| ⬆️ **update** | `nix flake update && sudo nixos-rebuild switch --flake /etc/nixos` |
+| 🛠️ **rebuild** | `rebuild` (fish) — switch + commit + tag + push |
+| ⬆️ **update** | `nix flake update` then `rebuild` |
 | ↩️ **rollback** | `sudo nixos-rebuild --rollback` |
 | 📜 **history** | `sudo nixos-rebuild list-generations` |
-| 🧹 **cleanup** | `sudo nix-collect-garbage -d` |
+| 🧹 **cleanup** | `cleanup` (fish) — old generations + old tags, counter keeps going |
 
 ## 🎨 Where to change what
 
@@ -56,9 +56,14 @@ A hand-rolled, fully reproducible NixOS + home-manager setup running the
 
 ## 🌱 Housekeeping
 
+- **Versioning** lives in `.version` (source of truth) and every successful
+  `rebuild` bumps it by one, tagging `nixos-<n>` and pushing it. The number
+  is independent of Nix generations, so it always counts up and cleanup can
+  never reset it.
+- `cleanup` deletes all old Nix generations and all old `nixos-*` tags but
+  keeps the current generation, the current tag and the `.version` counter —
+  the next rebuild just continues from where you left off.
 - Every `switch` creates a **generation** — a bootable snapshot. Keep a few
-  for safety, clean the rest with `nix-collect-garbage -d`.
-- Commit changes before rebuilding so the repo always matches reality:
-  `git add -A && git commit -m "..."` then `switch`.
+  for safety, clean the rest with `cleanup`.
 
 ## 🤍 Built with love, Nix, and way too much caffeine
