@@ -8,8 +8,9 @@
     ../../modules/hyprland.nix
     ../../modules/caelestia.nix
     ../../modules/tailscale.nix
-    ../../modules/flatpak.nix
   ];
+
+services.flatpak.enable = true;
 
   # Bootloader
   boot.loader.systemd-boot.enable = true;
