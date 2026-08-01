@@ -19,94 +19,111 @@
          {
             "type": "os",
             "key": "OS   ",
-            "keyColor": "31"  // = color1
+            "keyColor": "31",
+            "keyWidth": 10
         },
         {
             "type": "kernel",
             "key": " ├  ",
-            "keyColor": "31"
+            "keyColor": "31",
+            "keyWidth": 10
         },
         {
             "type": "packages",
             "format": "{pacman} (pacman)",
             "key": " ├ 󰏖 ",
-            "keyColor": "31"  
+            "keyColor": "31",
+            "keyWidth": 10
         },
         {
             "type": "shell",
             "key": " └  ",
-            "keyColor": "31" 
+            "keyColor": "31",
+            "keyWidth": 10
         },
         "break",
         {
             "type": "wm",
             "key": "WM   ",
-            "keyColor": "32" 
+            "keyColor": "32",
+            "keyWidth": 10
         },
         {
             "type": "wmtheme",
             "key": " ├ 󰉼 ",
-            "keyColor": "32"
+            "keyColor": "32",
+            "keyWidth": 10
         },
         {
             "type": "icons",
             "key": " ├ 󰀻 ",
-            "keyColor": "32"
+            "keyColor": "32",
+            "keyWidth": 10
         },
         {
             "type": "cursor",
             "key": " ├  ",
-            "keyColor": "32" 
+            "keyColor": "32",
+            "keyWidth": 10
         },
         {
             "type": "terminal",
             "key": " ├  ",
-            "keyColor": "32"
+            "keyColor": "32",
+            "keyWidth": 10
         },
         {
             "type": "terminalfont",
             "key": " └  ",
-            "keyColor": "32" 
+            "keyColor": "32",
+            "keyWidth": 10
         },
         "break",
         {
             "type": "host",
             "format": "{5} {1} Type {2}",
             "key": "PC   ",
-            "keyColor": "33"
+            "keyColor": "33",
+            "keyWidth": 10
         },
         {
             "type": "cpu",
             "format": "{1}",
             "key": " ├  ",
-            "keyColor": "33"
+            "keyColor": "33",
+            "keyWidth": 10
         },
         {
             "type": "gpu",
-            "format": "{1} {2}",            
+            "format": "{1} {2}",
             "key": " ├ 󰢮 ",
-            "keyColor": "33"
+            "keyColor": "33",
+            "keyWidth": 10
         },
         {
             "type": "memory",
             "key": " ├  ",
-            "keyColor": "33"
+            "keyColor": "33",
+            "keyWidth": 10
         },
         {
             "type": "swap",
             "key": " ├ 󰓡 ",
-            "keyColor": "33"
+            "keyColor": "33",
+            "keyWidth": 10
         },
         {
             "type": "disk",
             "key": " ├ 󰋊 ",
-            "keyColor": "33"
+            "keyColor": "33",
+            "keyWidth": 10
         },
         {
             "type": "monitor",
 	    "format": "{2}x{3} @ {6}\" & {11} hz",
             "key": " └  ",
-            "keyColor": "33"
+            "keyColor": "33",
+            "keyWidth": 10
         },
         "break",
         "break"

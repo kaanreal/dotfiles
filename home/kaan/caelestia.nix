@@ -92,6 +92,7 @@ in
     neovim
     vimPlugins.LazyVim
     vesktop
+    zenity
     # quickshell (qs) needed by the caelestia CLI to launch/IPC the shell
     qs
   ];
@@ -249,6 +250,12 @@ in
               git -C $repo tag -d $tags
           end
           echo "🧹 cleaned up — GitHub keeps all tags, local keeps nixos-$ver, next rebuild is nixos-"(math "$ver + 1")
+      end
+
+      # Override the dots' CAELESTIA ASCII banner greeting: fish skips
+      # autoloading fish_greeting.fish because we define it here first.
+      function fish_greeting
+          command -v fastfetch &> /dev/null && fastfetch
       end
     '';
   };
