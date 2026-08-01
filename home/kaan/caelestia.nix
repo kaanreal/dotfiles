@@ -125,6 +125,10 @@ in
   xdg.configFile."mimeapps.list".force = true;
   xdg.dataFile."applications/mimeapps.list".force = true;
 
+    # Kitty config
+     xdg.configFile."kitty".source = ./kitty;
+
+
   home.file = {
     # Dotfiles, symlinked from the patched pinned input
     ".config/hypr" = {
