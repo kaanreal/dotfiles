@@ -2,6 +2,9 @@
 
 {
   hardware.graphics.enable = true;
+  # 32-bit GL stack (mesa32 + nvidia lib32) at /run/opengl-driver-32/lib,
+  # needed by 32-bit clients like the Steam/Wine UI.
+  hardware.graphics.enable32Bit = true;
 
   hardware.nvidia = {
     modesetting.enable = true;

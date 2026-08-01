@@ -82,6 +82,16 @@ services.flatpak.enable = true;
   # (e.g. the Steam Runtime / pressure-vessel used by yawl/osu-winello).
   programs.nix-ld.enable = true;
 
+  # pressure-vessel also runs i386 ELF binaries
+  # (i386-linux-gnu-capsule-capture-libs) to capture 32-bit libs. The nix-ld
+  # module only wires the x86_64 loader, so do the same for /lib/ld-linux.so.2
+  # and point nix-ld at the i686 glibc.
+  environment.ldso32 = "${pkgs.nix-ld}/libexec/nix-ld";
+  environment.sessionVariables = {
+    NIX_LD_i686_linux = "${pkgs.pkgsi686Linux.stdenv.cc.bintools.dynamicLinker}";
+    NIX_LD_LIBRARY_PATH_i686_linux = lib.makeLibraryPath [ pkgs.pkgsi686Linux.glibc ];
+  };
+
   # pressure-vessel's container test execs /bin/true and needs basic tools at
   # FHS locations (/bin, /usr/bin) that NixOS doesn't provide. Symlink the
   # essentials. Targets MUST be /nix/store paths: /run/current-system/sw/bin
@@ -101,7 +111,9 @@ services.flatpak.enable = true;
       ++ mk pkgs.util-linux "/usr/bin" [ "mount" "umount" ]
       ++ mk pkgs.gnused "/usr/bin" [ "sed" ]
       ++ mk pkgs.gnugrep "/usr/bin" [ "grep" ]
-      ++ mk pkgs.findutils "/usr/bin" [ "find" ];
+      ++ mk pkgs.findutils "/usr/bin" [ "find" ]
+      ++ mk pkgs.glibc.bin "/usr/bin" [ "ldconfig" "ldd" "locale" "localedef" ]
+      ++ mk pkgs.getent "/usr/bin" [ "getent" ];
 
   # Put the FHS dirs on PATH so pressure-vessel/bwrap find `true` & co inside
   # the container (it inherits the parent environment's PATH).
@@ -113,9 +125,13 @@ services.flatpak.enable = true;
   # at both locations the tool probes.
   system.activationScripts.ldsocache.text = ''
     mkdir -p /var/cache/ldconfig
-    ${pkgs.glibc.bin}/bin/ldconfig -C /var/cache/ldconfig/ld.so.cache \
-      /run/opengl-driver/lib /run/current-system/sw/lib
-    ln -sfn /var/cache/ldconfig/ld.so.cache /etc/ld.so.cache
+    CACHE=/var/cache/ldconfig/ld.so.cache
+    dirs="/run/opengl-driver/lib /run/current-system/sw/lib"
+    for d in /run/opengl-driver-32/lib; do
+      [ -d "$d" ] && dirs="$dirs $d"
+    done
+    ${pkgs.glibc.bin}/bin/ldconfig -C $CACHE $dirs
+    ln -sfn $CACHE /etc/ld.so.cache
   '';
 
   # CachyOS kernel, zen4-optimized for the Ryzen 7 7800X3D.
