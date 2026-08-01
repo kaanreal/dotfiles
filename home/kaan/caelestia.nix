@@ -95,6 +95,7 @@ in
     zenity
     unzip
     gearlever
+    steam
     # quickshell (qs) needed by the caelestia CLI to launch/IPC the shell
     qs
   ];

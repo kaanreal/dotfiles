@@ -107,6 +107,17 @@ services.flatpak.enable = true;
   # the container (it inherits the parent environment's PATH).
   environment.variables.PATH = [ "/usr/bin" "/bin" ];
 
+  # pressure-vessel's capsule-capture-libs opens the ld.so.cache to figure out
+  # which libraries to copy into the container. NixOS ships none, so generate
+  # one at boot covering the GL/Vulkan driver dir and system libs. Provide it
+  # at both locations the tool probes.
+  system.activationScripts.ldsocache.text = ''
+    mkdir -p /var/cache/ldconfig
+    ${pkgs.glibc.bin}/bin/ldconfig -C /var/cache/ldconfig/ld.so.cache \
+      /run/opengl-driver/lib /run/current-system/sw/lib
+    ln -sfn /var/cache/ldconfig/ld.so.cache /etc/ld.so.cache
+  '';
+
   # CachyOS kernel, zen4-optimized for the Ryzen 7 7800X3D.
   # Uses the caller's nixpkgs (overlays.default), so the rest of the system
   # is unaffected; the kernel itself is compiled locally on first rebuild.
