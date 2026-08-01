@@ -82,6 +82,20 @@ services.flatpak.enable = true;
   # (e.g. the Steam Runtime / pressure-vessel used by yawl/osu-winello).
   programs.nix-ld.enable = true;
 
+  # pressure-vessel's container test execs /bin/true and needs basic tools at
+  # FHS locations (/bin, /usr/bin) that NixOS doesn't provide. Symlink the
+  # essentials so the Steam Runtime container can start.
+  systemd.tmpfiles.rules =
+    let
+      link = prefix: bin: "L ${prefix}/${bin} - - - - /run/current-system/sw/bin/${bin}";
+    in
+      map (link "/bin") [ "true" "false" "echo" "bash" "mount" "umount" ]
+      ++ map (link "/usr/bin") [
+        "env" "cat" "cp" "rm" "mkdir" "touch" "readlink" "stat" "sed" "grep"
+        "ls" "head" "tail" "cut" "tr" "wc" "dirname" "basename" "mktemp" "ln"
+        "find" "id" "uname"
+      ];
+
   # CachyOS kernel, zen4-optimized for the Ryzen 7 7800X3D.
   # Uses the caller's nixpkgs (overlays.default), so the rest of the system
   # is unaffected; the kernel itself is compiled locally on first rebuild.
