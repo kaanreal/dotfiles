@@ -84,17 +84,28 @@ services.flatpak.enable = true;
 
   # pressure-vessel's container test execs /bin/true and needs basic tools at
   # FHS locations (/bin, /usr/bin) that NixOS doesn't provide. Symlink the
-  # essentials so the Steam Runtime container can start.
+  # essentials. Targets MUST be /nix/store paths: /run/current-system/sw/bin
+  # doesn't exist inside the container, so those symlinks break (execvp ENOENT).
   systemd.tmpfiles.rules =
     let
-      link = prefix: bin: "L ${prefix}/${bin} - - - - /run/current-system/sw/bin/${bin}";
+      link = pkg: prefix: bin: "L+ ${prefix}/${bin} - - - - ${pkg}/bin/${bin}";
+      mk = pkg: prefix: bins: map (link pkg prefix) bins;
     in
-      map (link "/bin") [ "true" "false" "echo" "bash" "mount" "umount" ]
-      ++ map (link "/usr/bin") [
-        "env" "cat" "cp" "rm" "mkdir" "touch" "readlink" "stat" "sed" "grep"
-        "ls" "head" "tail" "cut" "tr" "wc" "dirname" "basename" "mktemp" "ln"
-        "find" "id" "uname"
-      ];
+      mk pkgs.coreutils "/bin" [ "true" "false" "echo" ]
+      ++ mk pkgs.bash "/bin" [ "bash" ]
+      ++ mk pkgs.util-linux "/bin" [ "mount" "umount" ]
+      ++ mk pkgs.coreutils "/usr/bin" [ "true" "false" "echo" "env" "cat" "cp"
+        "rm" "mkdir" "touch" "readlink" "stat" "ls" "head" "tail" "cut" "tr"
+        "wc" "dirname" "basename" "mktemp" "ln" "id" "uname" ]
+      ++ mk pkgs.bash "/usr/bin" [ "sh" "bash" ]
+      ++ mk pkgs.util-linux "/usr/bin" [ "mount" "umount" ]
+      ++ mk pkgs.gnused "/usr/bin" [ "sed" ]
+      ++ mk pkgs.gnugrep "/usr/bin" [ "grep" ]
+      ++ mk pkgs.findutils "/usr/bin" [ "find" ];
+
+  # Put the FHS dirs on PATH so pressure-vessel/bwrap find `true` & co inside
+  # the container (it inherits the parent environment's PATH).
+  environment.variables.PATH = [ "/usr/bin" "/bin" ];
 
   # CachyOS kernel, zen4-optimized for the Ryzen 7 7800X3D.
   # Uses the caller's nixpkgs (overlays.default), so the rest of the system
