@@ -78,6 +78,10 @@ services.flatpak.enable = true;
 
   nixpkgs.config.allowUnfree = true;
 
+  # Run generic Linux binaries that expect an FHS-style dynamic linker path
+  # (e.g. the Steam Runtime / pressure-vessel used by yawl/osu-winello).
+  programs.nix-ld.enable = true;
+
   # CachyOS kernel, zen4-optimized for the Ryzen 7 7800X3D.
   # Uses the caller's nixpkgs (overlays.default), so the rest of the system
   # is unaffected; the kernel itself is compiled locally on first rebuild.
