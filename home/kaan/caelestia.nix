@@ -128,6 +128,9 @@ in
     # Kitty config
      xdg.configFile."kitty".source = ./kitty;
 
+    # Fastfetch config
+     xdg.configFile."fastfetch".source = ./fastfetch;
+
 
   home.file = {
     # Dotfiles, symlinked from the patched pinned input
@@ -137,7 +140,7 @@ in
     };
     ".config/fish".source = "${dots}/fish";
     ".config/foot".source = "${dots}/foot";
-    ".config/fastfetch".source = "${dots}/fastfetch";
+    # ".config/fastfetch".source = "${dots}/fastfetch";
     ".config/btop".source = "${dots}/btop";
     ".config/micro".source = "${dots}/micro";
     ".config/Thunar" = {
