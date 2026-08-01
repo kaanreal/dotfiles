@@ -93,6 +93,7 @@ in
     vimPlugins.LazyVim
     vesktop
     zenity
+    unzip
     # quickshell (qs) needed by the caelestia CLI to launch/IPC the shell
     qs
   ];
