@@ -48,6 +48,18 @@ services.flatpak.enable = true;
   };
   environment.systemPackages = with pkgs; [
     ntfs3g
+
+    # Captured into the pressure-vessel container via the ld.so.cache (sw/lib is
+    # scanned). osu-wine's Wine needs these to render and for fonts:
+    #   - libglvnd: GLVND dispatchers (libEGL.so.1/libGL.so.1/libGLX.so.0) so
+    #     Wine can create an EGL/GL context -> "no driver could be loaded".
+    #   - vulkan-loader: libvulkan.so.1 -> "Failed to load libvulkan.so.1".
+    #   - freetype: libfreetype.so.6 -> "Wine cannot find the FreeType font library".
+    libglvnd
+    vulkan-loader
+    freetype
+    # update-desktop-database for the osu-mime step of osu-winello
+    desktop-file-utils
   ];
 
   # Bootloader
@@ -144,6 +156,12 @@ services.flatpak.enable = true;
   # Put the FHS dirs on PATH so pressure-vessel/bwrap find `true` & co inside
   # the container (it inherits the parent environment's PATH).
   environment.variables.PATH = [ "/usr/bin" "/bin" ];
+
+  # Bind-mount the NixOS system profile into the container. pressure-vessel
+  # always mounts /nix, so nix-ld's loader paths (/nix/store, or the default
+  # /run/current-system/sw/share/nix-ld/lib/ld.so) then resolve inside the
+  # container too. Otherwise nix-ld panics with ENOENT there.
+  environment.variables.PRESSURE_VESSEL_FILESYSTEMS_RW = "/run/current-system /nix";
 
   # pressure-vessel's capsule-capture-libs opens the ld.so.cache to figure out
   # which libraries to copy into the container. NixOS ships none, so generate
