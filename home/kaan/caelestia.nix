@@ -195,6 +195,19 @@ in
     ".config/caelestia/user-config.fish".text = ''
       # Caelestia user fish config
 
+      # User-installed scripts (e.g. osu-wine from osu-winello).
+      # set (not fish_add_path): the dots' ~/.config/fish is a read-only nix
+      # store symlink, so universal variables cannot be written.
+      set -gx PATH $HOME/.local/bin $PATH
+
+      # Force the container-correct nix-ld env. The login session (started
+      # before the fix) inherits NIX_LD=/run/current-system/... from an old
+      # /etc/set-environment; inside the pressure-vessel container that path
+      # does not exist -> nix-ld ENOENT panic. /nix/store paths work on the
+      # host AND inside the container (which only mounts /nix).
+      set -gx NIX_LD /nix/store/w59civhx8gfi5w00qz6xrv951s13kf7g-nix-ld-libraries/share/nix-ld/lib/ld.so
+      set -gx NIX_LD_LIBRARY_PATH /nix/store/w59civhx8gfi5w00qz6xrv951s13kf7g-nix-ld-libraries/share/nix-ld/lib
+
       # Rebuild NixOS, bump the version counter, then commit + tag + push.
       # The version lives in .version, so every successful rebuild always
       # moves to the next number and cleanup can never reset it.

@@ -9,11 +9,29 @@ let
   nix-ld-libraries = pkgs.buildEnv {
     name = "nix-ld-libraries";
     pathsToLink = [ "/lib" ];
-    paths = map lib.getLib [
-      pkgs.zlib pkgs.zstd pkgs.stdenv.cc.cc pkgs.curl pkgs.openssl
-      pkgs.attr pkgs.libssh pkgs.bzip2 pkgs.libxml2 pkgs.acl
-      pkgs.libsodium pkgs.util-linux pkgs.xz pkgs.systemd
-    ];
+    paths = map lib.getLib (
+      [
+        pkgs.zlib pkgs.zstd pkgs.stdenv.cc.cc pkgs.curl pkgs.openssl
+        pkgs.attr pkgs.libssh pkgs.bzip2 pkgs.libxml2 pkgs.acl
+        pkgs.libsodium pkgs.util-linux pkgs.xz pkgs.systemd
+      ]
+      # The GL/Vulkan/Font stack (same packages /run/opengl-driver provides:
+      # mesa + nvidia + nvidia-egl-external-platforms + nvidia-vaapi-driver,
+      # plus the glvnd dispatchers, vulkan-loader and freetype). These are for
+      # programs that run through nix-ld inside the pressure-vessel container
+      # (osu-wine): their runtime LD_LIBRARY_PATH comes from
+      # NIX_LD_LIBRARY_PATH, and pressure-vessel does NOT capture libs from the
+      # host ld.so.cache into the container, so Wine's dlopen would otherwise
+      # fail with "no driver could be loaded" / "cannot find the FreeType font
+      # library".
+      ++ config.hardware.graphics.extraPackages
+      ++ [
+        config.hardware.graphics.package
+        pkgs.libglvnd
+        pkgs.vulkan-loader
+        pkgs.freetype
+      ]
+    );
     extraPrefix = "/share/nix-ld";
     ignoreCollisions = true;
     postBuild = ''
