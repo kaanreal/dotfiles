@@ -84,9 +84,11 @@ services.flatpak.enable = true;
 
   # pressure-vessel also runs i386 ELF binaries
   # (i386-linux-gnu-capsule-capture-libs) to capture 32-bit libs. The nix-ld
-  # module only wires the x86_64 loader, so do the same for /lib/ld-linux.so.2
-  # and point nix-ld at the i686 glibc.
-  environment.ldso32 = "${pkgs.nix-ld}/libexec/nix-ld";
+  # module only wires the x86_64 loader. The 32-bit loader MUST be the i686
+  # build of nix-ld: an x86_64 nix-ld only ever reads NIX_LD_x86_64_linux and
+  # would serve the x86_64 ld.so to 32-bit binaries ("Accessing a corrupted
+  # shared library").
+  environment.ldso32 = "${pkgs.pkgsi686Linux.nix-ld}/libexec/nix-ld";
   environment.sessionVariables = {
     NIX_LD_i686_linux = "${pkgs.pkgsi686Linux.stdenv.cc.bintools.dynamicLinker}";
     NIX_LD_LIBRARY_PATH_i686_linux = lib.makeLibraryPath [ pkgs.pkgsi686Linux.glibc ];
