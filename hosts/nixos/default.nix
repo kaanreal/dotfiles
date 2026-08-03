@@ -1,5 +1,26 @@
 { config, pkgs, lib, nix-cachyos-kernel, ... }:
 
+let
+  # Replicates programs.nix-ld's library env, but at a /nix/store path.
+  # The module's default NIX_LD* point at /run/current-system/sw/share/nix-ld,
+  # which does not exist inside the pressure-vessel container (only /nix is
+  # mounted), making nix-ld panic with ENOENT there. /nix/store paths work both
+  # on the host and inside the container.
+  nix-ld-libraries = pkgs.buildEnv {
+    name = "nix-ld-libraries";
+    pathsToLink = [ "/lib" ];
+    paths = map lib.getLib [
+      pkgs.zlib pkgs.zstd pkgs.stdenv.cc.cc pkgs.curl pkgs.openssl
+      pkgs.attr pkgs.libssh pkgs.bzip2 pkgs.libxml2 pkgs.acl
+      pkgs.libsodium pkgs.util-linux pkgs.xz pkgs.systemd
+    ];
+    extraPrefix = "/share/nix-ld";
+    ignoreCollisions = true;
+    postBuild = ''
+      ln -s ${pkgs.stdenv.cc.bintools.dynamicLinker} $out/share/nix-ld/lib/ld.so
+    '';
+  };
+in
 {
   imports = [
     ./hardware-configuration.nix
@@ -90,8 +111,11 @@ services.flatpak.enable = true;
   # shared library").
   environment.ldso32 = "${pkgs.pkgsi686Linux.nix-ld}/libexec/nix-ld";
   environment.sessionVariables = {
-    NIX_LD_i686_linux = "${pkgs.pkgsi686Linux.stdenv.cc.bintools.dynamicLinker}";
-    NIX_LD_LIBRARY_PATH_i686_linux = lib.makeLibraryPath [ pkgs.pkgsi686Linux.glibc ];
+    NIX_LD = lib.mkForce "${nix-ld-libraries}/share/nix-ld/lib/ld.so";
+    NIX_LD_LIBRARY_PATH = lib.mkForce "${nix-ld-libraries}/share/nix-ld/lib";
+    NIX_LD_i686_linux = lib.mkForce "${pkgs.pkgsi686Linux.stdenv.cc.bintools.dynamicLinker}";
+    NIX_LD_LIBRARY_PATH_i686_linux =
+      lib.mkForce (lib.makeLibraryPath [ pkgs.pkgsi686Linux.glibc ]);
   };
 
   # pressure-vessel's container test execs /bin/true and needs basic tools at
