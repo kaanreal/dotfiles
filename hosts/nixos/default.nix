@@ -167,10 +167,16 @@ services.flatpak.enable = true;
   # which libraries to copy into the container. NixOS ships none, so generate
   # one at boot covering the GL/Vulkan driver dir and system libs. Provide it
   # at both locations the tool probes.
+  #
+  # Scan the NEW generation's sw/lib ($systemConfig is set at the top of the
+  # activation script) instead of /run/current-system: the latter is only
+  # re-pointed to the new generation at the END of activation, so scanning it
+  # would cache the PREVIOUS generation's libraries (e.g. newly added
+  # systemPackages would be missing from the container).
   system.activationScripts.ldsocache.text = ''
     mkdir -p /var/cache/ldconfig
     CACHE=/var/cache/ldconfig/ld.so.cache
-    dirs="/run/opengl-driver/lib /run/current-system/sw/lib"
+    dirs="/run/opengl-driver/lib ''${systemConfig}/sw/lib"
     for d in /run/opengl-driver-32/lib; do
       [ -d "$d" ] && dirs="$dirs $d"
     done
