@@ -13,41 +13,39 @@ set -gx NH_OS_FLAKE $HOME/cozy-home
 # packages, services, drivers, modules, or system configuration. Dotfile
 # edits are already live (out-of-store links into ~/cozy-home/dots).
 function rebuild
-    nh os switch .
+    nh os switch $HOME/cozy-home
 end
 
 # Update Nix inputs (nixpkgs, home-manager, caelestia-shell, kernel) and
 # rebuild. Does not touch the dots.
 function update
-    cd ~/cozy-home
+    set -l repo $HOME/cozy-home
+
+    nix flake update --flake $repo
     or return 1
 
-    nix flake update
-    or return 1
-
-    nh os switch .
+    nh os switch $repo
 end
 
 # Pull upstream Caelestia config changes into dots/ (vendored subtree).
 # git fetch + subtree pull; no resets, no discarding conflicts.
 function dots-update
-    cd ~/cozy-home
-    or return 1
+    set -l repo $HOME/cozy-home
 
-    if not git diff --quiet
+    if not git -C $repo diff --quiet
         echo "cozy-home has uncommitted changes; commit or stash them first"
         return 1
     end
 
-    if not git diff --cached --quiet
+    if not git -C $repo diff --cached --quiet
         echo "cozy-home has staged changes; commit or stash them first"
         return 1
     end
 
-    git fetch caelestia-upstream
+    git -C $repo fetch caelestia-upstream
     or return 1
 
-    git subtree pull --prefix dots caelestia-upstream main
+    git -C $repo subtree pull --prefix dots caelestia-upstream main
     or begin
         echo "merge needs attention; resolve the conflicts in ~/cozy-home/dots"
         return 1
@@ -58,23 +56,22 @@ end
 
 # Commit + push a snapshot of this repo (no empty commits, no force-push).
 function save
-    cd ~/cozy-home
-    or return 1
+    set -l repo $HOME/cozy-home
 
-    if not test -d .git
+    if not test -d $repo/.git
         echo "skip: ~/cozy-home is not a git repository"
         return 1
     end
 
     echo "==> saving ~/cozy-home"
 
-    git add -A
+    git -C $repo add -A
     or begin
         echo "failed to stage changes"
         return 1
     end
 
-    if git diff --cached --quiet
+    if git -C $repo diff --cached --quiet
         echo "    nothing new — skipping commit"
         return 0
     end
@@ -82,14 +79,14 @@ function save
     set -l emojis '🌸' '🌷' '🍃' '🧁' '🐰' '🫧' '❄️' '🧸' '🍓' '🐈'
     set -l emoji $emojis[(random 1 (count $emojis))]
     set -l msg "$emoji "(date '+%F %H:%M:%S')
-    git commit -m "$msg"
+    git -C $repo commit -m "$msg"
     or begin
         echo "commit failed"
         return 1
     end
 
-    if git remote | grep -q .
-        git push origin
+    if git -C $repo remote get-url origin >/dev/null 2>&1
+        git -C $repo push origin
         or echo "    committed, but push failed"
     else
         echo "    no remote — committed locally, skipped push"
