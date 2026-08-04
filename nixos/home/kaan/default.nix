@@ -1,10 +1,11 @@
-{ pkgs, lib, caelestia-shell, ... }:
+{ ... }:
 
 {
   imports = [
+    ./modules/caelestia.nix
     ./modules/shell.nix
-    ./modules/dotfiles.nix
     ./modules/apps.nix
+    ./modules/dotfiles.nix
     ./modules/mimeapps.nix
   ];
 

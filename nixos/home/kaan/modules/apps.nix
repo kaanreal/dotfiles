@@ -1,11 +1,12 @@
 # Declarative packages. The desktop-critical CLI tools live here.
 # Large GUI apps (chrome, spotify, steam, ...) are intentionally kept
 # manageable by hand, so they stay in this list unchanged.
+# Shell packages (fish, starship, ...) live in modules/shell.nix.
 { pkgs, home-manager, ... }:
 
 {
   home.packages = with pkgs; [
-    # Shell + CLI runtime tools
+    # Desktop / Wayland tools
     fuzzel
     grim
     slurp
@@ -19,21 +20,11 @@
     trash-cli
     pavucontrol
     xdg-user-dirs
-    # Dotfile components
-    fish
-    starship
-    foot
+    # Personal dotfile apps
     fastfetch
     btop
     micro
     thunar
-    eza
-    zoxide
-    direnv
-    lazygit
-    bat
-    ripgrep
-    jq
     # Random stuff
     bibata-cursors
     opencode

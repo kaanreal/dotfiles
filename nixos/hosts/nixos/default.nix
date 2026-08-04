@@ -1,4 +1,10 @@
-{ config, pkgs, lib, nix-cachyos-kernel, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  nix-cachyos-kernel,
+  ...
+}:
 
 let
   # Replicates programs.nix-ld's library env, but at a /nix/store path.
@@ -11,9 +17,20 @@ let
     pathsToLink = [ "/lib" ];
     paths = map lib.getLib (
       [
-        pkgs.zlib pkgs.zstd pkgs.stdenv.cc.cc pkgs.curl pkgs.openssl
-        pkgs.attr pkgs.libssh pkgs.bzip2 pkgs.libxml2 pkgs.acl
-        pkgs.libsodium pkgs.util-linux pkgs.xz pkgs.systemd
+        pkgs.zlib
+        pkgs.zstd
+        pkgs.stdenv.cc.cc
+        pkgs.curl
+        pkgs.openssl
+        pkgs.attr
+        pkgs.libssh
+        pkgs.bzip2
+        pkgs.libxml2
+        pkgs.acl
+        pkgs.libsodium
+        pkgs.util-linux
+        pkgs.xz
+        pkgs.systemd
       ]
       # The GL/Vulkan/Font stack (same packages /run/opengl-driver provides:
       # mesa + nvidia + nvidia-egl-external-platforms + nvidia-vaapi-driver,
@@ -49,7 +66,7 @@ in
     ../../modules/tailscale.nix
   ];
 
-services.flatpak.enable = true;
+  services.flatpak.enable = true;
 
   # Windows SSD (Samsung 990 PRO) mounted at boot
   # ntfs-3g (FUSE) instead of ntfs3: more forgiving of dirty/hibernated volumes.
@@ -135,8 +152,8 @@ services.flatpak.enable = true;
   };
   console.keyMap = "de";
 
-  services.printing.enable = true;  
-  
+  services.printing.enable = true;
+
   users.users.kaan = {
     isNormalUser = true;
     description = "kaan";
@@ -166,8 +183,7 @@ services.flatpak.enable = true;
     NIX_LD = lib.mkForce "${nix-ld-libraries}/share/nix-ld/lib/ld.so";
     NIX_LD_LIBRARY_PATH = lib.mkForce "${nix-ld-libraries}/share/nix-ld/lib";
     NIX_LD_i686_linux = lib.mkForce "${pkgs.pkgsi686Linux.stdenv.cc.bintools.dynamicLinker}";
-    NIX_LD_LIBRARY_PATH_i686_linux =
-      lib.mkForce (lib.makeLibraryPath [ pkgs.pkgsi686Linux.glibc ]);
+    NIX_LD_LIBRARY_PATH_i686_linux = lib.mkForce (lib.makeLibraryPath [ pkgs.pkgsi686Linux.glibc ]);
   };
 
   # pressure-vessel's container test execs /bin/true and needs basic tools at
@@ -176,26 +192,73 @@ services.flatpak.enable = true;
   # doesn't exist inside the container, so those symlinks break (execvp ENOENT).
   systemd.tmpfiles.rules =
     let
-      link = pkg: prefix: bin: "L+ ${prefix}/${bin} - - - - ${pkg}/bin/${bin}";
-      mk = pkg: prefix: bins: map (link pkg prefix) bins;
+      link =
+        pkg: prefix: bin:
+        "L+ ${prefix}/${bin} - - - - ${pkg}/bin/${bin}";
+      mk =
+        pkg: prefix: bins:
+        map (link pkg prefix) bins;
     in
-      mk pkgs.coreutils "/bin" [ "true" "false" "echo" ]
-      ++ mk pkgs.bash "/bin" [ "bash" ]
-      ++ mk pkgs.util-linux "/bin" [ "mount" "umount" ]
-      ++ mk pkgs.coreutils "/usr/bin" [ "true" "false" "echo" "env" "cat" "cp"
-        "rm" "mkdir" "touch" "readlink" "stat" "ls" "head" "tail" "cut" "tr"
-        "wc" "dirname" "basename" "mktemp" "ln" "id" "uname" ]
-      ++ mk pkgs.bash "/usr/bin" [ "sh" "bash" ]
-      ++ mk pkgs.util-linux "/usr/bin" [ "mount" "umount" ]
-      ++ mk pkgs.gnused "/usr/bin" [ "sed" ]
-      ++ mk pkgs.gnugrep "/usr/bin" [ "grep" ]
-      ++ mk pkgs.findutils "/usr/bin" [ "find" ]
-      ++ mk pkgs.glibc.bin "/usr/bin" [ "ldconfig" "ldd" "locale" "localedef" ]
-      ++ mk pkgs.getent "/usr/bin" [ "getent" ];
+    mk pkgs.coreutils "/bin" [
+      "true"
+      "false"
+      "echo"
+    ]
+    ++ mk pkgs.bash "/bin" [ "bash" ]
+    ++ mk pkgs.util-linux "/bin" [
+      "mount"
+      "umount"
+    ]
+    ++ mk pkgs.coreutils "/usr/bin" [
+      "true"
+      "false"
+      "echo"
+      "env"
+      "cat"
+      "cp"
+      "rm"
+      "mkdir"
+      "touch"
+      "readlink"
+      "stat"
+      "ls"
+      "head"
+      "tail"
+      "cut"
+      "tr"
+      "wc"
+      "dirname"
+      "basename"
+      "mktemp"
+      "ln"
+      "id"
+      "uname"
+    ]
+    ++ mk pkgs.bash "/usr/bin" [
+      "sh"
+      "bash"
+    ]
+    ++ mk pkgs.util-linux "/usr/bin" [
+      "mount"
+      "umount"
+    ]
+    ++ mk pkgs.gnused "/usr/bin" [ "sed" ]
+    ++ mk pkgs.gnugrep "/usr/bin" [ "grep" ]
+    ++ mk pkgs.findutils "/usr/bin" [ "find" ]
+    ++ mk pkgs.glibc.bin "/usr/bin" [
+      "ldconfig"
+      "ldd"
+      "locale"
+      "localedef"
+    ]
+    ++ mk pkgs.getent "/usr/bin" [ "getent" ];
 
   # Put the FHS dirs on PATH so pressure-vessel/bwrap find `true` & co inside
   # the container (it inherits the parent environment's PATH).
-  environment.variables.PATH = [ "/usr/bin" "/bin" ];
+  environment.variables.PATH = [
+    "/usr/bin"
+    "/bin"
+  ];
 
   # Bind-mount the NixOS system profile into the container. pressure-vessel
   # always mounts /nix, so nix-ld's loader paths (/nix/store, or the default
