@@ -57,5 +57,7 @@
     direnv
     lazygit
     bat
+    ripgrep
+    jq
   ];
 }
