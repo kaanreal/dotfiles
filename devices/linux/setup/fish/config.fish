@@ -1,7 +1,7 @@
 # kaan's Arch fish config
 #
-# Managed by the repo at ~/.dotfiles (or ~/nix-config). To edit, change
-# arch/setup/fish/config.fish there and run arch/setup.sh again — this
+# Managed in the repo at ~/cozy-home/devices/linux/setup/fish/config.fish.
+# To edit, change it there and run devices/linux/setup.sh again — this
 # file is a copy, and the copy is overwritten on re-setup.
 
 # --- prompt ---------------------------------------------------------------
@@ -26,7 +26,7 @@ alias in='sudo pacman -S'
 alias un='sudo pacman -Rns'
 alias se='pacman -Ss'
 alias orphans='sudo pacman -Rns (pacman -Qtdq)'
-alias dots='cd $HOME/.dotfiles'
+alias dots='cd $HOME/cozy-home'
 
 # --- greeting -------------------------------------------------------------
 # Adaptive fastfetch: shrink the logo so it always fits the window.
@@ -47,12 +47,11 @@ function fish_greeting
 end
 
 # --- dotfiles backup ------------------------------------------------------
-# Snapshots the repo (~/.dotfiles) to git + pushes to GitHub. Same flow as
-# the NixOS side (nixpush): full snapshot each time, run whenever you like.
+# Snapshots ~/cozy-home (dots + Arch config included) to git + pushes.
+# Same flow as the NixOS side (save): full snapshot each time.
 function dotpush
-    set -l repo $HOME/.dotfiles
-    test -d $repo || set repo $HOME/nix-config
-    test -d $repo || begin; echo "no dotfiles repo found"; return 1; end
+    set -l repo $HOME/cozy-home
+    test -d $repo || begin; echo "no cozy-home repo found"; return 1; end
 
     git -C $repo add -A || return 1
 

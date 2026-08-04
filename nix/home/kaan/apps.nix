@@ -1,7 +1,7 @@
 # Declarative packages. The desktop-critical CLI tools live here.
 # Large GUI apps (chrome, spotify, steam, ...) are intentionally kept
 # manageable by hand, so they stay in this list unchanged.
-# Shell packages (fish, starship, ...) live in modules/shell.nix.
+# Shell packages (fish, starship, ...) live here too.
 { pkgs, home-manager, ... }:
 
 {
@@ -48,5 +48,14 @@
     unzip
     gearlever
     steam
+    # Shell / terminal
+    fish
+    starship
+    foot
+    eza
+    zoxide
+    direnv
+    lazygit
+    bat
   ];
 }

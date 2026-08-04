@@ -59,14 +59,14 @@ in
 {
   imports = [
     ./hardware-configuration.nix
-    ../../modules/base.nix
-    ../../modules/gpu.nix
-    ../../modules/hyprland.nix
-    ../../modules/caelestia.nix
-    ../../modules/tailscale.nix
+    ../../nix/modules/base.nix
+    ../../nix/modules/gpu.nix
+    ../../nix/modules/desktop.nix
+    ../../nix/modules/packages.nix
   ];
 
   services.flatpak.enable = true;
+  services.tailscale.enable = true;
 
   # Windows SSD (Samsung 990 PRO) mounted at boot
   # ntfs-3g (FUSE) instead of ntfs3: more forgiving of dirty/hibernated volumes.
@@ -82,21 +82,8 @@ in
       "x-gvfs-show"
     ];
   };
-  environment.systemPackages = with pkgs; [
-    ntfs3g
-
-    # Captured into the pressure-vessel container via the ld.so.cache (sw/lib is
-    # scanned). osu-wine's Wine needs these to render and for fonts:
-    #   - libglvnd: GLVND dispatchers (libEGL.so.1/libGL.so.1/libGLX.so.0) so
-    #     Wine can create an EGL/GL context -> "no driver could be loaded".
-    #   - vulkan-loader: libvulkan.so.1 -> "Failed to load libvulkan.so.1".
-    #   - freetype: libfreetype.so.6 -> "Wine cannot find the FreeType font library".
-    libglvnd
-    vulkan-loader
-    freetype
-    # update-desktop-database for the osu-mime step of osu-winello
-    desktop-file-utils
-  ];
+  # System-level packages live in nix/modules/packages.nix (per-user apps are
+  # in nix/home/kaan/apps.nix).
 
   # Bootloader — Limine: one clean menu for NixOS + Arch + Windows.
   # NixOS entries are generated per rebuild; Arch + Windows live in
@@ -304,7 +291,7 @@ in
   # With `flake` set, no paths or hostnames are needed.
   programs.nh = {
     enable = true;
-    flake = "/home/kaan/nix-config";
+    flake = "/home/kaan/cozy-home";
     clean = {
       enable = true;
       extraArgs = "--keep-since 7d --keep 5";

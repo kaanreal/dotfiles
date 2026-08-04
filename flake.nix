@@ -1,5 +1,5 @@
 {
-  description = "kaan's NixOS configuration";
+  description = "kaan's cozy home — one repo for NixOS, dotfiles, and every machine";
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
@@ -30,7 +30,7 @@
           inherit nix-cachyos-kernel;
         };
         modules = [
-          ./nixos/hosts/nixos
+          ./hosts/nixos-desktop
           home-manager.nixosModules.home-manager
           {
             home-manager.useGlobalPkgs = true;
@@ -38,7 +38,7 @@
             home-manager.extraSpecialArgs = {
               inherit caelestia-shell home-manager;
             };
-            home-manager.users.kaan = import ./nixos/home/kaan;
+            home-manager.users.kaan = import ./nix/home/kaan;
           }
         ];
       };
@@ -53,7 +53,7 @@
           overlays = [ nix-cachyos-kernel.overlays.default ];
         };
         modules = [
-          ./nixos/home/kaan
+          ./nix/home/kaan
         ];
         extraSpecialArgs = {
           inherit caelestia-shell home-manager;

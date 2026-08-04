@@ -1,6 +1,6 @@
 # Caelestia shell package, Quickshell wrapper, and runtime dependencies.
 # Only the package is pinned via Nix here; the config lives in
-# ~/dotfiles (see modules/dotfiles.nix) so it stays editable.
+# dots/ (see nix/home/kaan/dotfiles.nix) so it stays editable.
 {
   pkgs,
   lib,

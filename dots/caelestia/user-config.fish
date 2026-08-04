@@ -12,16 +12,17 @@ set -gx PATH $HOME/.local/bin $PATH
 set -gx NIX_LD /nix/store/w59civhx8gfi5w00qz6xrv951s13kf7g-nix-ld-libraries/share/nix-ld/lib/ld.so
 set -gx NIX_LD_LIBRARY_PATH /nix/store/w59civhx8gfi5w00qz6xrv951s13kf7g-nix-ld-libraries/share/nix-ld/lib
 
-# Apply the system config (system + home). Only for Nix packages, services,
-# drivers, modules, or system configuration. Dotfile edits are already live.
+# Apply the system config (system + home) from this repo. Only for Nix
+# packages, services, drivers, modules, or system configuration. Dotfile
+# edits are already live (out-of-store links into ~/cozy-home/dots).
 function rebuild
     nh os switch
 end
 
 # Update Nix inputs (nixpkgs, home-manager, caelestia-shell, kernel) and
-# rebuild. Does not touch ~/dotfiles.
+# rebuild. Does not touch the dots.
 function update
-    cd ~/nix-config
+    cd ~/cozy-home
     or return 1
 
     nix flake update
@@ -30,68 +31,69 @@ function update
     nh os switch
 end
 
-# Pull upstream Caelestia config changes (git fetch + merge; no resets,
-# no discarding conflicts).
+# Pull upstream Caelestia config changes into dots/ (vendored subtree).
+# git fetch + subtree pull; no resets, no discarding conflicts.
 function dots-update
-    cd ~/dotfiles
+    cd ~/cozy-home
     or return 1
 
     if not git diff --quiet
-        echo "dotfiles has uncommitted changes; commit or stash them first"
+        echo "cozy-home has uncommitted changes; commit or stash them first"
         return 1
     end
 
     if not git diff --cached --quiet
-        echo "dotfiles has staged changes; commit or stash them first"
+        echo "cozy-home has staged changes; commit or stash them first"
         return 1
     end
 
-    git fetch upstream
+    git fetch caelestia-upstream
     or return 1
 
-    git merge upstream/main
+    git subtree pull --prefix dots caelestia-upstream main
     or begin
-        echo "merge needs attention; resolve the conflicts in ~/dotfiles"
+        echo "merge needs attention; resolve the conflicts in ~/cozy-home/dots"
         return 1
     end
 
     echo "Caelestia dots updated. Run hyprctl reload and restart the shell."
 end
 
-# Commit + push snapshots of the nix config and the dotfiles, separately.
+# Commit + push a snapshot of this repo (no empty commits, no force-push).
 function save
-    for repo in ~/nix-config ~/dotfiles
-        if not test -d "$repo/.git"
-            echo "skip: $repo is not a git repository"
-            continue
-        end
+    cd ~/cozy-home
+    or return 1
 
-        echo "==> saving $repo"
+    if not test -d .git
+        echo "skip: ~/cozy-home is not a git repository"
+        return 1
+    end
 
-        git -C "$repo" add -A
-        or begin
-            echo "failed to stage changes in $repo"
-            return 1
-        end
+    echo "==> saving ~/cozy-home"
 
-        if git -C "$repo" diff --cached --quiet
-            echo "    nothing new — skipping commit"
-            continue
-        end
+    git add -A
+    or begin
+        echo "failed to stage changes"
+        return 1
+    end
 
-        set -l msg "update "(date +%F\ %H:%M | string join ' ')
-        git -C "$repo" commit -m "$msg"
-        or begin
-            echo "commit failed in $repo"
-            return 1
-        end
+    if git diff --cached --quiet
+        echo "    nothing new — skipping commit"
+        return 0
+    end
 
-        if git -C "$repo" remote | grep -q .
-            git -C "$repo" push
-            or echo "    committed, but push failed"
-        else
-            echo "    no remote — committed locally, skipped push"
-        end
+    set -l msg "update "(date +%F\ %H:%M)
+    git commit -m "$msg"
+    or begin
+        echo "commit failed"
+        return 1
+    end
+
+    if git remote | grep -q .
+        git push origin
+        or echo "    committed, but push failed"
+    else
+        echo "    no remote — committed locally, skipped push"
     end
 end
 

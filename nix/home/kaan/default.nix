@@ -2,11 +2,10 @@
 
 {
   imports = [
-    ./modules/caelestia.nix
-    ./modules/shell.nix
-    ./modules/apps.nix
-    ./modules/dotfiles.nix
-    ./modules/mimeapps.nix
+    ./caelestia.nix
+    ./apps.nix
+    ./dotfiles.nix
+    ./mimeapps.nix
   ];
 
   home = {

@@ -18,14 +18,6 @@
 
   hardware.bluetooth.enable = true;
 
-  environment.systemPackages = with pkgs; [
-    git
-    curl
-    wget
-    ripgrep
-    jq
-  ];
-
   nix.settings = {
     experimental-features = [
       "nix-command"

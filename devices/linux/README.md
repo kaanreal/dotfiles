@@ -14,7 +14,7 @@ repo alongside everything else.
 | nvme0n1p3 | 16.8G    | NixOS swap                  |
 
 Arch has no bootloader and no ESP of its own. The Limine entry in
-`nixos/hosts/nixos/default.nix` points at the kernel inside the
+`hosts/nixos-desktop/default.nix` points at the kernel inside the
 `archroot` partition:
 
 ```
@@ -34,9 +34,9 @@ kernel updates keep working without touching the bootloader.
 Boot the **Arch live ISO** and run:
 
 ```sh
-curl -LO https://raw.githubusercontent.com/kaanreal/nix/main/arch/install.sh
-chmod +x install.sh
-./install.sh
+curl -LO https://raw.githubusercontent.com/kaanreal/cozy-home/main/scripts/install-arch.sh
+chmod +x install-arch.sh
+./install-arch.sh
 ```
 
 The script:
@@ -45,8 +45,7 @@ The script:
    done offline, hence the ISO).
 2. Creates one ext4 partition labeled `archroot` (500G) + an 8G swapfile.
 3. `pacstrap`s a base system and configures it (hostname, locale, user).
-4. Clones this repo to `~/nix-config` + the dotfiles fork to `~/dotfiles`,
-   and runs `arch/setup.sh`.
+4. Clones this repo to `~/cozy-home` and runs `devices/linux/setup.sh`.
 
 Windows is never touched. NixOS keeps its swap, ESP and data.
 
@@ -56,23 +55,24 @@ Windows is never touched. NixOS keeps its swap, ESP and data.
 - **CLI**: `git fish starship kitty fastfetch btop eza ripgrep bat zoxide
   fzf neovim vim tmux htop openssh pacman-contrib`
 - **Desktop** (optional): `hyprland waybar wofi mako swww greetd ...`
-  via `arch/setup.sh --with-desktop`
+  via `devices/linux/setup.sh --with-desktop`
 
 ## Dotfiles
 
-- `~/dotfiles/kitty`, `~/dotfiles/fastfetch` — shared with NixOS, symlinked
-  (the `~/dotfiles` repo is a git fork of caelestia-dots/caelestia).
-- `arch/setup/fish` — Arch fish config (starship, fastfetch greeting,
+- `dots/kitty`, `dots/fastfetch`, `dots/starship.toml`, `dots/btop`,
+  `dots/micro` — shared with every OS, symlinked straight from the repo
+  (dots/ is a vendored copy of caelestia-dots/caelestia).
+- `devices/linux/setup/fish` — Arch fish config (starship, fastfetch greeting,
   `up`/`in`/`se` aliases, `dotpush` backup function).
-- `arch/setup/starship.toml` — shared-style starship prompt.
-- `arch/setup/hypr`, `arch/setup/waybar` — minimal Hyprland desktop.
+- `devices/linux/setup/starship.toml` — shared-style starship prompt.
+- `devices/linux/setup/hypr`, `devices/linux/setup/waybar` — minimal Hyprland desktop.
 
-`dotpush` backs the whole repo (Arch config included) up to GitHub, just
-like `save` does on NixOS (which also pushes `~/dotfiles`).
+`dotpush` backs the whole repo (dots + Arch config included) up to GitHub,
+just like `save` does on NixOS.
 
 ## Day-to-day
 
 - Update: `up` (= `sudo pacman -Syu`)
 - Install/search: `in foo` / `se foo`
 - Backup dots: `dotpush`
-- Edit dots in `~/dotfiles`, then re-run `~/nix-config/arch/setup.sh`
+- Edit dots in `dots/`, then re-run `devices/linux/setup.sh`

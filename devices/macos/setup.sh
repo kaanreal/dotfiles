@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 #
 # macOS-specific settings on top of the shared dotfiles.
-# Run from the cloned repo:  ./mac/setup.sh [--defaults]
+# Run from the cloned repo:  ./devices/macos/setup.sh [--defaults]
 #
 # --defaults  applies the sensible `defaults`/Dock tweaks below.
 
@@ -11,8 +11,8 @@ REPO="$(cd "$(dirname "$0")/.." && pwd)"
 
 echo "==> Installing macOS fish config"
 mkdir -p "$HOME/.config"
-cp -rn "$REPO/mac/setup/fish" "$HOME/.config/"
-ln -sfn "$REPO/mac/setup/starship.toml" "$HOME/.config/starship.toml"
+cp -rn "$REPO/devices/macos/setup/fish" "$HOME/.config/"
+ln -sfn "$REPO/devices/macos/setup/starship.toml" "$HOME/.config/starship.toml"
 
 if [[ "${1:-}" == "--defaults" ]]; then
   echo "==> Applying macOS defaults"

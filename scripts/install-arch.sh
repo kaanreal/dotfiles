@@ -44,14 +44,11 @@ TIMEZONE=Europe/Berlin
 LOCALE=en_US.UTF-8
 KEYMAP=de
 
-REPO_URL=https://github.com/kaanreal/nix.git
-REPO_DIR=/home/kaan/nix-config
+REPO_URL=https://github.com/kaanreal/cozy-home.git
+REPO_DIR=/home/kaan/cozy-home
 
-# The shared dotfiles live in a separate repo (a git fork of
-# caelestia-dots/caelestia). Create https://github.com/kaanreal/dotfiles
-# (or set DOTFILES_URL to any git URL / local path) before running.
-DOTFILES_URL="${DOTFILES_URL:-https://github.com/kaanreal/dotfiles.git}"
-DOTFILES_DIR=/home/kaan/dotfiles
+# The dotfiles live inside the same repo at dots/. The setup script
+# (devices/linux/setup.sh) links them from there.
 
 # ---------------------------------------------------------------------------
 # Safety checks — never run this against the wrong disk.
@@ -173,13 +170,11 @@ arch-chroot /mnt mkinitcpio -P
 arch-chroot /mnt systemctl enable NetworkManager
 
 # ---------------------------------------------------------------------------
-# 5. Dotfiles from the repos.
+# 5. Dotfiles from the repo.
 # ---------------------------------------------------------------------------
-echo "==> Cloning nix-config repo"
+echo "==> Cloning cozy-home repo"
 arch-chroot /mnt su - "${USERNAME}" -c "git clone ${REPO_URL} '${REPO_DIR}'"
-echo "==> Cloning dotfiles repo"
-arch-chroot /mnt su - "${USERNAME}" -c "git clone ${DOTFILES_URL} '${DOTFILES_DIR}'"
-arch-chroot /mnt su - "${USERNAME}" -c "'${REPO_DIR}/arch/setup.sh'"
+arch-chroot /mnt su - "${USERNAME}" -c "'${REPO_DIR}/devices/linux/setup.sh'"
 
 # ---------------------------------------------------------------------------
 # 6. Done.

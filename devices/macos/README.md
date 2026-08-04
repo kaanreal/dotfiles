@@ -5,21 +5,21 @@ directory is the bootstrap for the day a Mac joins.
 
 ## Layout
 
-- `bootstrap.sh` — one-shot: Homebrew + repo clones + shared links.
-- `setup.sh` — macOS specifics (fish, starship, Dock/defaults).
-- `setup/fish/` — macOS fish config (adapted, no pacman aliases).
-- `setup/starship.toml` — same prompt as everywhere else.
+- `scripts/install-macos.sh` — one-shot: Homebrew + repo clone + shared links.
+- `devices/macos/setup.sh` — macOS specifics (fish, starship, Dock/defaults).
+- `devices/macos/setup/fish/` — macOS fish config (adapted, no pacman aliases).
+- `devices/macos/setup/starship.toml` — same prompt as everywhere else.
 
-Shared configs (kitty, fastfetch) live in `~/dotfiles` (the
-caelestia-dots/caelestia fork) and are reused unchanged, so they stay in
-sync across all three OSes.
+Shared configs (kitty, fastfetch, starship, btop, micro) live in `dots/`
+inside the same repo and are reused unchanged, so they stay in sync across
+all three OSes.
 
 ## When the Mac arrives
 
 ```sh
 xcode-select --install
-curl -LO https://raw.githubusercontent.com/kaanreal/nix/main/mac/bootstrap.sh
-chmod +x bootstrap.sh && ./bootstrap.sh
+curl -LO https://raw.githubusercontent.com/kaanreal/cozy-home/main/scripts/install-macos.sh
+chmod +x install-macos.sh && ./install-macos.sh
 # then set fish as the login shell and:
-~/nix-config/mac/setup.sh --defaults
+~/cozy-home/devices/macos/setup.sh --defaults
 ```

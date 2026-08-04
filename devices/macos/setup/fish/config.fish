@@ -1,7 +1,7 @@
 # kaan's macOS fish config
 #
-# Managed in the repo at ~/.dotfiles — edit mac/setup/fish/config.fish
-# there and re-run mac/setup.sh to apply.
+# Managed in the repo at ~/cozy-home/devices/macos/setup/fish/config.fish.
+# To edit, change it there and re-run devices/macos/setup.sh to apply.
 
 # --- prompt ---------------------------------------------------------------
 starship init fish | source
@@ -23,7 +23,7 @@ alias up='brew upgrade && brew cleanup'
 alias in='brew install'
 alias un='brew uninstall'
 alias se='brew search'
-alias dots='cd $HOME/.dotfiles'
+alias dots='cd $HOME/cozy-home'
 
 # --- greeting -------------------------------------------------------------
 function fastfetch
@@ -42,11 +42,10 @@ function fish_greeting
     command -v fastfetch &> /dev/null && fastfetch
 end
 
-# --- dotfiles backup (same flow as nixpush / dotpush) ----------------------
+# --- dotfiles backup (same flow as save / dotpush) --------------------------
 function dotpush
-    set -l repo $HOME/.dotfiles
-    test -d $repo || set repo $HOME/nix-config
-    test -d $repo || begin; echo "no dotfiles repo found"; return 1; end
+    set -l repo $HOME/cozy-home
+    test -d $repo || begin; echo "no cozy-home repo found"; return 1; end
 
     git -C $repo add -A || return 1
 

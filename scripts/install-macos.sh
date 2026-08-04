@@ -4,18 +4,15 @@
 # third machine). When that Mac arrives:
 #
 #   1. Install the Command Line Tools:  xcode-select --install
-#   2. Run this script. It installs Homebrew, clones the nix-config repo
-#      and the dotfiles fork, and links the shared dotfiles (kitty,
-#      fastfetch) from ~/dotfiles.
-#   3. mac/setup/ holds macOS-specific config (fish, starship, Dock,
-#      defaults); anything that also belongs on Linux goes in ~/dotfiles.
+#   2. Run this script. It installs Homebrew, clones the cozy-home repo
+#      and links the shared dotfiles (kitty, fastfetch) from dots/.
+#   3. devices/macos/setup/ holds macOS-specific config (fish, starship,
+#      Dock, defaults); anything that also belongs on Linux goes in dots/.
 
 set -euo pipefail
 
-REPO_URL=https://github.com/kaanreal/nix.git
-REPO_DIR="$HOME/nix-config"
-DOTFILES_URL="${DOTFILES_URL:-https://github.com/kaanreal/dotfiles.git}"
-DOTFILES_DIR="$HOME/dotfiles"
+REPO_URL=https://github.com/kaanreal/cozy-home.git
+REPO_DIR="$HOME/cozy-home"
 
 echo "==> Installing Homebrew (if missing)"
 if ! command -v brew >/dev/null; then
@@ -23,20 +20,16 @@ if ! command -v brew >/dev/null; then
   eval "$(/opt/homebrew/bin/brew shellenv)"
 fi
 
-echo "==> Cloning nix-config repo"
+echo "==> Cloning cozy-home repo"
 if [ ! -d "$REPO_DIR" ]; then
   git clone "$REPO_URL" "$REPO_DIR"
 fi
 
-echo "==> Cloning dotfiles repo"
-if [ ! -d "$DOTFILES_DIR" ]; then
-  git clone "$DOTFILES_URL" "$DOTFILES_DIR"
-fi
-
-echo "==> Linking shared dotfiles"
+echo "==> Linking shared dotfiles from dots/"
 mkdir -p "$HOME/.config"
-ln -sfn "$DOTFILES_DIR/kitty"     "$HOME/.config/kitty"
-ln -sfn "$DOTFILES_DIR/fastfetch" "$HOME/.config/fastfetch"
+ln -sfn "$REPO_DIR/dots/kitty"      "$HOME/.config/kitty"
+ln -sfn "$REPO_DIR/dots/fastfetch"  "$HOME/.config/fastfetch"
+ln -sfn "$REPO_DIR/dots/starship.toml" "$HOME/.config/starship.toml"
 
 echo "==> Installing shared CLI tools"
 brew install --quiet \
@@ -45,10 +38,10 @@ brew install --quiet \
 
 echo "==> Installing macOS dotfiles"
 mkdir -p "$HOME/.config"
-cp -rn "$REPO_DIR/mac/setup/fish"         "$HOME/.config/"
-ln -sfn "$REPO_DIR/mac/setup/starship.toml" "$HOME/.config/starship.toml"
+cp -rn "$REPO_DIR/devices/macos/setup/fish"          "$HOME/.config/"
+ln -sfn "$REPO_DIR/devices/macos/setup/starship.toml" "$HOME/.config/starship.toml"
 
 echo
 echo "=== macOS bootstrap complete ==="
 echo "finish in Terminal settings: set the shell to /opt/homebrew/bin/fish"
-echo "then run:  ~/nix-config/mac/setup.sh --defaults"
+echo "then run:  ~/cozy-home/devices/macos/setup.sh --defaults"

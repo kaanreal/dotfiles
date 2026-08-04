@@ -1,16 +1,17 @@
-# Personal dotfiles: plain writable Git files in ~/dotfiles (a git fork of
-# caelestia-dots/caelestia with kaan's overrides). These out-of-store links
-# point straight at the live directory, so editing a keybind or desktop
-# setting is immediate — no rebuild, no /nix/store copies.
+# Personal dotfiles: plain writable Git files in this repo (~/cozy-home/dots).
+# The dots are a vendored copy of caelestia-dots/caelestia with kaan's
+# overrides on top. These out-of-store links point straight at the live
+# directory, so editing a keybind or desktop setting is immediate — no
+# rebuild, no /nix/store copies.
 #
-#   ~/.config/hypr      -> ~/dotfiles/hypr        (restart shell to apply)
-#   ~/.config/caelestia -> ~/dotfiles/caelestia   (user overrides, cli.json)
-#   ~/.config/fish      -> ~/dotfiles/fish
+#   ~/.config/hypr      -> ~/cozy-home/dots/hypr      (restart shell to apply)
+#   ~/.config/caelestia -> ~/cozy-home/dots/caelestia (user overrides, cli.json)
+#   ~/.config/fish      -> ~/cozy-home/dots/fish
 #   ...
 { config, ... }:
 
 let
-  dotfiles = "${config.home.homeDirectory}/dotfiles";
+  dotfiles = "${config.home.homeDirectory}/cozy-home/dots";
   link = config.lib.file.mkOutOfStoreSymlink;
 in
 {
