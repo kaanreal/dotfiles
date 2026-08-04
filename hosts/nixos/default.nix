@@ -62,6 +62,7 @@ services.flatpak.enable = true;
       "uid=1000"
       "gid=100"
       "umask=022"
+      "x-gvfs-show"
     ];
   };
   environment.systemPackages = with pkgs; [

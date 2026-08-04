@@ -1,4 +1,4 @@
-{ pkgs, lib, caelestia-dots, caelestia-shell, ... }:
+{ pkgs, lib, caelestia-dots, caelestia-shell, home-manager, ... }:
 
 let
   dots = pkgs.applyPatches {
@@ -85,6 +85,7 @@ in
     cava
     kitty
     gh
+    home-manager.packages.${pkgs.stdenv.hostPlatform.system}.home-manager
     gnome-software
     jamesdsp
     vscode

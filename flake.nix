@@ -40,11 +40,25 @@
           home-manager.useGlobalPkgs = true;
           home-manager.useUserPackages = true;
           home-manager.extraSpecialArgs = {
-            inherit caelestia-dots caelestia-shell;
+            inherit caelestia-dots caelestia-shell home-manager;
           };
           home-manager.users.kaan = import ./home/kaan;
         }
       ];
+    };
+
+    homeConfigurations.kaan = home-manager.lib.homeManagerConfiguration {
+      pkgs = import nixpkgs {
+        system = "x86_64-linux";
+        config.allowUnfree = true;
+        overlays = [ nix-cachyos-kernel.overlays.default ];
+      };
+      modules = [
+        ./home/kaan
+      ];
+      extraSpecialArgs = {
+        inherit caelestia-dots caelestia-shell home-manager;
+      };
     };
   };
 }
