@@ -21,8 +21,8 @@ hl.on("hyprland.start", function()
     hl.exec_cmd("gsettings set org.gnome.desktop.interface cursor-theme " .. vars.cursorTheme)
     hl.exec_cmd("gsettings set org.gnome.desktop.interface cursor-size " .. vars.cursorSize)
 
-    -- Night light
-    hl.exec_cmd("gammastep")
+    -- Match the NVIDIA Control Panel's maximum digital-vibrance setting.
+    hl.exec_cmd("uvx nvibrant 1023 1023")
 end)
 
 -- Resizer listeners

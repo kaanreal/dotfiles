@@ -21,6 +21,16 @@ hl.config({
     },
 
     debug = {
-        error_position = 1
-    }
+        error_position = 1,
+        -- Avoid continuous cursor/libinput log writes on the render thread.
+        disable_logs   = true,
+        disable_time   = true,
+    },
+
+    opengl = {
+        -- Hyprland's Nvidia anti-flicker workaround can intentionally hold or
+        -- drop frames. This desktop does not show the idle-flicker symptom and
+        -- prioritises consistent pacing at 2560x1440@180 instead.
+        nvidia_anti_flicker = false,
+    },
 })

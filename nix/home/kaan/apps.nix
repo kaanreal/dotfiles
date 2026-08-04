@@ -14,7 +14,6 @@
     wl-clipboard
     cliphist
     hyprpicker
-    gammastep
     libnotify
     ydotool
     trash-cli
@@ -59,5 +58,7 @@
     bat
     ripgrep
     jq
+    # Provides `uvx`, used to launch nvibrant at Hyprland startup.
+    uv
   ];
 }
