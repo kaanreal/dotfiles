@@ -72,8 +72,10 @@ your local edits. On a conflict it stops and shows you the files.
 | Edit a keybind / app config | edit `dots/…` directly, reload Hyprland (`hyprctl reload`) |
 
 `save` commits a full snapshot of the repo (system config **and** dots
-together — one place, one history) and pushes it. No version counters or
-tags — every commit is a checkpoint, run it as often as you like.
+together — one place, one history) and pushes it to `origin`. It skips the
+commit and push when nothing changed. Commit subjects use a random cozy emoji
+followed by the local date and time, for example `🧸 2026-08-04 21:30:12`.
+No version counters or tags — every commit is a checkpoint.
 
 ## 🎨 Where to change what
 

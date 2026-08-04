@@ -55,8 +55,9 @@ function dotpush
 
     git -C $repo add -A || return 1
 
-    set -l emojis '🌼' '🌙' '🍃' '🧁' '🌷' '🫧' '☕'
-    set -l msg "$emojis[(random 1 (count $emojis))] arch update "(date +%F\ %H:%M | string join ' ')
+    set -l emojis '🌼' '🌙' '🍃' '🧁' '🌷' '🫧' '☕' '🧸' '🍓' '🐈'
+    set -l emoji $emojis[(random 1 (count $emojis))]
+    set -l msg "$emoji "(date '+%F %H:%M:%S')
     set -l body (git -C $repo diff --cached --stat | string join \n)
 
     if test -z "$body"
