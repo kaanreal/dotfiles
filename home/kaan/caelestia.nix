@@ -209,64 +209,53 @@ in
       set -gx NIX_LD /nix/store/w59civhx8gfi5w00qz6xrv951s13kf7g-nix-ld-libraries/share/nix-ld/lib/ld.so
       set -gx NIX_LD_LIBRARY_PATH /nix/store/w59civhx8gfi5w00qz6xrv951s13kf7g-nix-ld-libraries/share/nix-ld/lib
 
-      # Rebuild NixOS, bump the version counter, then commit + tag + push.
-      # The version lives in .version, so every successful rebuild always
-      # moves to the next number and cleanup can never reset it.
+      # Apply the system config (system + home). No git, no tags — run freely.
       function rebuild
-          set -l repo $HOME/nix-config
-          set -l verfile $repo/.version
-
           sudo nixos-rebuild switch --flake /etc/nixos
           or begin
-              echo "💔 rebuild failed — nothing was committed"
+              echo "💔 rebuild failed"
               return 1
           end
+          echo "✅ system rebuilt — run nixpush to back it up"
+      end
 
-          set -l ver 0
-          if test -f $verfile
-              set ver (string trim (cat $verfile))
-          end
-          set -l next (math "$ver + 1")
-          echo $next > $verfile
+      # Apply only the home-manager part — faster, no sudo, no system rebuild.
+      function hm
+          home-manager switch --flake /etc/nixos#kaan
+      end
+
+      # Save a snapshot of the config to git + push to GitHub. Run whenever
+      # you want a backup; commits are full snapshots, so frequency is up to you.
+      function nixpush
+          set -l repo $HOME/nix-config
 
           git -C $repo add -A
+          or return 1
 
           set -l emojis '🌸' '🌙' '☕' '🍃' '🧁' '🕯️' '🌷' '✨' '🫧'
           set -l emoji $emojis[(random 1 (count $emojis))]
-          set -l msg "$emoji Rebuild "(date +%F\ %H:%M | string join ' ')
+          set -l msg "$emoji update "(date +%F\ %H:%M | string join ' ')
           set -l body (git -C $repo diff --cached --stat | string join \n)
+
+          if test -z "$body"
+              echo "🕊️ nothing to commit — config already saved"
+              return 0
+          end
+
           git -C $repo commit -m "$msg" -m "$body"
 
-          git -C $repo tag -a "nixos-$next" -m "🌱 nixos-$next"
-          echo "🌱 tagged nixos-$next"
-
           if git -C $repo remote | grep -q .
-              git -C $repo push --follow-tags
-              or echo "⚠️ committed + tagged locally, but push failed"
+              git -C $repo push
+              or echo "⚠️ committed locally, but push failed"
           else
               echo "🕊️ no git remote set — committed locally, skipped push"
           end
       end
 
-      # Delete old Nix generations and old local tags. GitHub keeps every tag
-      # forever; locally we keep only the newest (nixos-$ver). The version
-      # counter is untouched, so the next rebuild continues from there.
+      # Free disk space: delete old NixOS generations and garbage.
       function cleanup
-          set -l repo $HOME/nix-config
-          set -l verfile $repo/.version
-
           sudo nix-collect-garbage -d
-
-          set -l ver 0
-          if test -f $verfile
-              set ver (string trim (cat $verfile))
-          end
-          set -l keep "nixos-$ver"
-          set -l tags (git -C $repo tag -l 'nixos-*' | string match -v $keep)
-          if test -n "$tags"
-              git -C $repo tag -d $tags
-          end
-          echo "🧹 cleaned up — GitHub keeps all tags, local keeps nixos-$ver, next rebuild is nixos-"(math "$ver + 1")
+          echo "🧹 cleaned up old generations and garbage"
       end
 
       # Override the dots' CAELESTIA ASCII banner greeting: fish skips
