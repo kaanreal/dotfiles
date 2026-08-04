@@ -4,6 +4,11 @@
 # User-installed scripts (e.g. osu-wine from osu-winello).
 set -gx PATH $HOME/.local/bin $PATH
 
+# nh >= 4.4 dropped current-directory flake detection; bare `nh os switch`
+# now only falls back to /etc/nixos. Point it at this repo so update/rebuild
+# work from any directory.
+set -gx NH_OS_FLAKE $HOME/cozy-home
+
 # Force the container-correct nix-ld env. The login session (started
 # before the fix) inherits NIX_LD=/run/current-system/... from an old
 # /etc/set-environment; inside the pressure-vessel container that path
@@ -16,7 +21,7 @@ set -gx NIX_LD_LIBRARY_PATH /nix/store/w59civhx8gfi5w00qz6xrv951s13kf7g-nix-ld-l
 # packages, services, drivers, modules, or system configuration. Dotfile
 # edits are already live (out-of-store links into ~/cozy-home/dots).
 function rebuild
-    nh os switch
+    nh os switch .
 end
 
 # Update Nix inputs (nixpkgs, home-manager, caelestia-shell, kernel) and
@@ -28,7 +33,7 @@ function update
     nix flake update
     or return 1
 
-    nh os switch
+    nh os switch .
 end
 
 # Pull upstream Caelestia config changes into dots/ (vendored subtree).
