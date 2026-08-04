@@ -1,0 +1,25 @@
+{
+    "appearance": {
+        "transparency": {
+            "enabled": false
+        }
+    },
+    "general": {
+        "apps": {
+            "explorer": [
+                "nautilus",
+                "--new-window"
+            ],
+            "terminal": [
+                "kitty"
+            ]
+        }
+    },
+    "launcher": {
+        "actionPrefix": "/",
+        "showOnHover": true
+    },
+    "services": {
+        "gpuType": "NVIDIA"
+    }
+}

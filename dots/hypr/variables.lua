@@ -11,6 +11,7 @@ return {
     editor                     = "codium",
     fileExplorer               = "thunar",
     audioSettings              = "pavucontrol",
+    kbLayout                = "us",
 
     -- Touchpad
     touchpadDisableTyping      = true,
