@@ -45,7 +45,13 @@ LOCALE=en_US.UTF-8
 KEYMAP=de
 
 REPO_URL=https://github.com/kaanreal/nix.git
-REPO_DIR=/home/kaan/.dotfiles
+REPO_DIR=/home/kaan/nix-config
+
+# The shared dotfiles live in a separate repo (a git fork of
+# caelestia-dots/caelestia). Create https://github.com/kaanreal/dotfiles
+# (or set DOTFILES_URL to any git URL / local path) before running.
+DOTFILES_URL="${DOTFILES_URL:-https://github.com/kaanreal/dotfiles.git}"
+DOTFILES_DIR=/home/kaan/dotfiles
 
 # ---------------------------------------------------------------------------
 # Safety checks — never run this against the wrong disk.
@@ -167,10 +173,12 @@ arch-chroot /mnt mkinitcpio -P
 arch-chroot /mnt systemctl enable NetworkManager
 
 # ---------------------------------------------------------------------------
-# 5. Dotfiles from the repo.
+# 5. Dotfiles from the repos.
 # ---------------------------------------------------------------------------
-echo "==> Cloning dotfiles repo"
+echo "==> Cloning nix-config repo"
 arch-chroot /mnt su - "${USERNAME}" -c "git clone ${REPO_URL} '${REPO_DIR}'"
+echo "==> Cloning dotfiles repo"
+arch-chroot /mnt su - "${USERNAME}" -c "git clone ${DOTFILES_URL} '${DOTFILES_DIR}'"
 arch-chroot /mnt su - "${USERNAME}" -c "'${REPO_DIR}/arch/setup.sh'"
 
 # ---------------------------------------------------------------------------

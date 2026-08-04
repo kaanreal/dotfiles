@@ -237,5 +237,16 @@ services.flatpak.enable = true;
   # Cap compile parallelism (physical cores) so kernel builds fit in 15GB RAM
   nix.settings.cores = 8;
 
+  # nh: the rebuild frontend. `nh os switch` / `nh os build` / `nh clean all`.
+  # With `flake` set, no paths or hostnames are needed.
+  programs.nh = {
+    enable = true;
+    flake = "/home/kaan/nix-config";
+    clean = {
+      enable = true;
+      extraArgs = "--keep-since 7d --keep 5";
+    };
+  };
+
   system.stateVersion = "26.05";
 }

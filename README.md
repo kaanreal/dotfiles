@@ -1,8 +1,9 @@
 # 🏡 kaan's cozy multi-OS home
 
-One repo, three machines — **NixOS**, **Arch Linux**, and a **Mac** (planned).
-Shared dotfiles are versioned once and reused everywhere. Everything is
-backed up to GitHub with a single command per OS.
+One repo for the system config, one repo for the dotfiles — **NixOS**, **Arch
+Linux**, and a **Mac** (planned). The dotfiles are a git fork of
+caelestia-dots/caelestia, so upstream fixes keep flowing in while everything
+stays editable in plain files. Both repos are backed up to GitHub.
 
 > “Everything in one place. Everything rebuildable. Everything *mine*.”
 
@@ -24,50 +25,57 @@ Windows (`/Windows`) — see `nixos/hosts/nixos/default.nix`.
 ## 🗂️ Layout
 
 ```
-.
-├── flake.nix                  # entry point + pinned inputs
-├── nixos/                     # NixOS + home-manager
-│   ├── hosts/nixos/           # this machine (boot, GPU, networking)
-│   ├── home/kaan/             # user config: apps, dots, overrides
-│   ├── modules/               # base, gpu, hyprland, caelestia
-│   └── patches/               # dots patches (execs, env, kb, fonts, scheme)
-├── arch/                      # Arch Linux
-│   ├── install.sh             # run from the Arch ISO (disk surgery + install)
-│   ├── setup.sh               # dotfiles + optional Hyprland desktop
-│   ├── setup/                 # Arch-specific fish, starship, hyprland, waybar
-│   └── README.md              # step-by-step install guide
-├── mac/                       # macOS (planned)
-│   ├── bootstrap.sh           # Homebrew + dots clone
-│   ├── setup.sh               # fish, starship, Dock/defaults
-│   └── README.md
-└── dotfiles/                  # shared across all OSes
-    ├── kitty/                 # kitty.conf
-    └── fastfetch/             # config.jsonc + logos
+~/nix-config                 # this repo: system + user config (declarative)
+├── flake.nix                # entry point + pinned inputs
+├── nixos/
+│   ├── hosts/nixos/         # this machine (boot, GPU, networking, nh)
+│   ├── home/kaan/           # user config, split into modules/
+│   │   └── modules/         # shell.nix (caelestia), dotfiles.nix,
+│   │                        # apps.nix, mimeapps.nix
+│   └── modules/             # base, gpu, hyprland, caelestia
+├── arch/                    # Arch Linux (install.sh, setup.sh, setup/)
+└── mac/                     # macOS (planned: bootstrap.sh, setup.sh)
+
+~/dotfiles                   # git fork of caelestia-dots/caelestia (editable)
+├── hypr/ fish/ foot/ btop/ micro/ Thunar/ starship.toml   # the dots
+├── caelestia/               # kaan's overrides: hypr-vars.lua, hypr-user.lua,
+│                            # user-config.fish, cli.json, shell.json
+├── kitty/  fastfetch/       # shared with Arch + macOS
+└── (upstream remote -> caelestia-dots/caelestia)
 ```
+
+`~/.config/*` are symlinks into `~/dotfiles` (out-of-store links, set in
+`nixos/home/kaan/modules/dotfiles.nix`). Editing a dotfile needs **no
+rebuild** — restart the app/shell and it's live.
 
 ## 🚀 Daily life
 
 | Task | Command |
 | --- | --- |
-| Rebuild NixOS | `rebuild` (fish) |
-| Apply home-manager only | `hm` (fish) |
-| Free old generations | `cleanup` (fish) |
-| Backup everything | `nixpush` (NixOS) · `dotpush` (Arch/macOS) |
+| Rebuild NixOS (+ home) | `rebuild` (fish) → `nh os switch` |
+| Update nixpkgs + rebuild | `update` (fish) |
+| Free old generations | `cleanup` (fish) → `nh clean all` |
+| Commit + push both repos | `save` (fish) |
+| Pull upstream dotfiles changes | `cd ~/dotfiles && git fetch upstream && git merge upstream/main` |
+| Edit a keybind / app config | edit `~/dotfiles/...` directly, restart the app or shell |
 
-`nixpush` / `dotpush` are the same idea per OS: commit a full snapshot of
-this repo and push to GitHub. No version counters or tags — every commit
-is a checkpoint, run them as often as you like.
+`save` commits a full snapshot of `~/nix-config` **and** `~/dotfiles` and
+pushes both to GitHub. No version counters or tags — every commit is a
+checkpoint, run it as often as you like.
 
 ## 🎨 Where to change what
 
 | I want to... | Go to |
 | --- | --- |
-| add / remove an app (NixOS) | `home.packages` in `nixos/home/kaan/caelestia.nix` |
-| change keybinds, gaps, blur | `hypr-vars.lua` in `nixos/home/kaan/caelestia.nix` |
-| add window rules | `hypr-user.lua` in `nixos/home/kaan/caelestia.nix` |
+| add / remove an app (NixOS) | `home.packages` in `nixos/home/kaan/modules/apps.nix` |
+| change keybinds, gaps, blur | `~/dotfiles/caelestia/hypr-vars.lua` (live) |
+| add window rules / autostart | `~/dotfiles/caelestia/hypr-user.lua` (live) |
+| change shell settings (apps, transparency…) | `~/dotfiles/caelestia/shell.json` (live) |
+| change special-workspace apps | `~/dotfiles/caelestia/cli.json` (live) |
+| change fish functions (`rebuild`, `save`, …) | `~/dotfiles/caelestia/user-config.fish` (live) |
 | change the boot menu | `boot.loader.limine` in `nixos/hosts/nixos/default.nix` |
-| edit kitty / fastfetch for all OSes | `dotfiles/kitty`, `dotfiles/fastfetch` |
+| edit kitty / fastfetch for all OSes | `~/dotfiles/kitty`, `~/dotfiles/fastfetch` |
 | change Arch setup | `arch/setup/` + `arch/README.md` |
-| fix something in the upstream dots | add a patch in `nixos/patches/` |
+| merge upstream dotfiles | `cd ~/dotfiles && git fetch upstream && git merge upstream/main` |
 
 ## 🤍 Built with love, Nix, Arch, and way too much caffeine

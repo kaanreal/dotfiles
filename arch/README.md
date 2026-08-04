@@ -45,7 +45,8 @@ The script:
    done offline, hence the ISO).
 2. Creates one ext4 partition labeled `archroot` (500G) + an 8G swapfile.
 3. `pacstrap`s a base system and configures it (hostname, locale, user).
-4. Clones this repo to `~/.dotfiles` and runs `arch/setup.sh`.
+4. Clones this repo to `~/nix-config` + the dotfiles fork to `~/dotfiles`,
+   and runs `arch/setup.sh`.
 
 Windows is never touched. NixOS keeps its swap, ESP and data.
 
@@ -59,18 +60,19 @@ Windows is never touched. NixOS keeps its swap, ESP and data.
 
 ## Dotfiles
 
-- `dotfiles/kitty`, `dotfiles/fastfetch` — shared with NixOS, symlinked.
+- `~/dotfiles/kitty`, `~/dotfiles/fastfetch` — shared with NixOS, symlinked
+  (the `~/dotfiles` repo is a git fork of caelestia-dots/caelestia).
 - `arch/setup/fish` — Arch fish config (starship, fastfetch greeting,
   `up`/`in`/`se` aliases, `dotpush` backup function).
 - `arch/setup/starship.toml` — shared-style starship prompt.
 - `arch/setup/hypr`, `arch/setup/waybar` — minimal Hyprland desktop.
 
 `dotpush` backs the whole repo (Arch config included) up to GitHub, just
-like `nixpush` does on NixOS.
+like `save` does on NixOS (which also pushes `~/dotfiles`).
 
 ## Day-to-day
 
 - Update: `up` (= `sudo pacman -Syu`)
 - Install/search: `in foo` / `se foo`
 - Backup dots: `dotpush`
-- Edit dots in `~/.dotfiles`, then re-run `~/.dotfiles/arch/setup.sh`
+- Edit dots in `~/dotfiles`, then re-run `~/nix-config/arch/setup.sh`

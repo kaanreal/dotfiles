@@ -2,8 +2,10 @@
 
 {
   imports = [
-    ./caelestia.nix
-    caelestia-shell.homeManagerModules.default
+    ./modules/shell.nix
+    ./modules/dotfiles.nix
+    ./modules/apps.nix
+    ./modules/mimeapps.nix
   ];
 
   home = {
