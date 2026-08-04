@@ -131,10 +131,10 @@ in
   xdg.dataFile."applications/mimeapps.list".force = true;
 
     # Kitty config
-     xdg.configFile."kitty".source = ./kitty;
+     xdg.configFile."kitty".source = ../../../dotfiles/kitty;
 
     # Fastfetch config
-     xdg.configFile."fastfetch".source = ./fastfetch;
+     xdg.configFile."fastfetch".source = ../../../dotfiles/fastfetch;
 
 
   home.file = {

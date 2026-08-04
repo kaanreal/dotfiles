@@ -34,7 +34,7 @@
         inherit nix-cachyos-kernel;
       };
       modules = [
-        ./hosts/nixos
+        ./nixos/hosts/nixos
         home-manager.nixosModules.home-manager
         {
           home-manager.useGlobalPkgs = true;
@@ -42,7 +42,7 @@
           home-manager.extraSpecialArgs = {
             inherit caelestia-dots caelestia-shell home-manager;
           };
-          home-manager.users.kaan = import ./home/kaan;
+          home-manager.users.kaan = import ./nixos/home/kaan;
         }
       ];
     };
@@ -54,7 +54,7 @@
         overlays = [ nix-cachyos-kernel.overlays.default ];
       };
       modules = [
-        ./home/kaan
+        ./nixos/home/kaan
       ];
       extraSpecialArgs = {
         inherit caelestia-dots caelestia-shell home-manager;

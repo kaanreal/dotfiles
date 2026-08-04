@@ -81,9 +81,30 @@ services.flatpak.enable = true;
     desktop-file-utils
   ];
 
-  # Bootloader
-  boot.loader.systemd-boot.enable = true;
+  # Bootloader — Limine: one clean menu for NixOS + Arch + Windows.
+  # NixOS entries are generated per rebuild; Arch + Windows live in
+  # extraEntries, which Limine's installer re-appends to /boot/limine/limine.conf.
+  boot.loader.systemd-boot.enable = false;
   boot.loader.efi.canTouchEfiVariables = true;
+  boot.loader.timeout = 5;
+  boot.loader.limine.enable = true;
+  boot.loader.limine.maxGenerations = 5;
+  boot.loader.limine.extraConfig = ''
+    remember_last_entry: yes
+    interface_branding: kaan
+    interface_branding_colour: 7EBAE4
+  '';
+  boot.loader.limine.extraEntries = ''
+    /Arch Linux
+        protocol: linux
+        path: fslabel(archroot):/boot/vmlinuz-linux
+        module_path: fslabel(archroot):/boot/initramfs-linux.img
+        cmdline: root=LABEL=archroot rw
+
+    /Windows
+        protocol: efi_boot_entry
+        entry: Windows Boot Manager
+  '';
 
   networking.hostName = "nixos";
   networking.networkmanager.enable = true;

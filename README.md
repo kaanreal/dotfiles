@@ -1,70 +1,73 @@
-# ❄️ kaan's cozy NixOS home
+# 🏡 kaan's cozy multi-OS home
 
-A hand-rolled, fully reproducible NixOS + home-manager setup running the
-**Caelestia shell** on **Hyprland**.
+One repo, three machines — **NixOS**, **Arch Linux**, and a **Mac** (planned).
+Shared dotfiles are versioned once and reused everywhere. Everything is
+backed up to GitHub with a single command per OS.
 
 > “Everything in one place. Everything rebuildable. Everything *mine*.”
 
 ---
 
-## ✨ What lives here
+## 🗺️ The machines
 
-- 🏠 **NixOS system config** — boot, GPU, networking, GDM
-- 🐚 **Caelestia shell** on Hyprland — patched, tuned, and auto-started
-- 🧩 **home-manager** — apps, dotfiles, and user overrides
-- 🩹 **5 hand-written patches** fixing the upstream dots for this machine
+| OS | Where | Bootloader | Desktop | State |
+| --- | --- | --- | --- | --- |
+| **NixOS** | Crucial SSD (shrunk to ~400G) | **Limine** (shared ESP) | Caelestia shell on Hyprland | ✅ daily driver |
+| **Arch** | Crucial SSD (~500G, label `archroot`) | Limine entry (`fslabel`) | minimal Hyprland (optional) | 🚧 install via `arch/install.sh` |
+| **Windows** | Samsung 990 PRO | Limine entry (chainload) | — | ✅ installed |
+| **macOS** | — | — | — | 📋 `mac/` bootstrap ready |
+
+Limine lives on the shared ESP and is managed entirely by NixOS. Each
+rebuild regenerates its entries for NixOS, Arch (`/Arch Linux`) and
+Windows (`/Windows`) — see `nixos/hosts/nixos/default.nix`.
 
 ## 🗂️ Layout
 
 ```
 .
 ├── flake.nix                  # entry point + pinned inputs
-├── flake.lock                 # 🔒 the reproducibility contract
-├── modules/                   # system-level building blocks
-│   ├── base.nix               # fonts, bluetooth, base packages
-│   ├── gpu.nix                # NVIDIA RTX 3050 (open modules)
-│   ├── hyprland.nix           # Hyprland + Qt theming
-│   └── caelestia.nix          # geoclue, polkit helper
-├── hosts/nixos/               # this machine's system config
-│   ├── default.nix
-│   └── hardware-configuration.nix
-├── home/kaan/                 # user-space config
-│   ├── default.nix
-│   └── caelestia.nix          # dots, patches, apps, user overrides
-└── patches/                   # dots patches (execs, env, kb, fonts, scheme)
+├── nixos/                     # NixOS + home-manager
+│   ├── hosts/nixos/           # this machine (boot, GPU, networking)
+│   ├── home/kaan/             # user config: apps, dots, overrides
+│   ├── modules/               # base, gpu, hyprland, caelestia
+│   └── patches/               # dots patches (execs, env, kb, fonts, scheme)
+├── arch/                      # Arch Linux
+│   ├── install.sh             # run from the Arch ISO (disk surgery + install)
+│   ├── setup.sh               # dotfiles + optional Hyprland desktop
+│   ├── setup/                 # Arch-specific fish, starship, hyprland, waybar
+│   └── README.md              # step-by-step install guide
+├── mac/                       # macOS (planned)
+│   ├── bootstrap.sh           # Homebrew + dots clone
+│   ├── setup.sh               # fish, starship, Dock/defaults
+│   └── README.md
+└── dotfiles/                  # shared across all OSes
+    ├── kitty/                 # kitty.conf
+    └── fastfetch/             # config.jsonc + logos
 ```
 
-## 🚀 Quickstart
+## 🚀 Daily life
 
 | Task | Command |
 | --- | --- |
-| 🛠️ **rebuild** | `rebuild` (fish) — switch + commit + tag + push |
-| ⬆️ **update** | `nix flake update` then `rebuild` |
-| ↩️ **rollback** | `sudo nixos-rebuild --rollback` |
-| 📜 **history** | `sudo nixos-rebuild list-generations` |
-| 🧹 **cleanup** | `cleanup` (fish) — old generations + old tags, counter keeps going |
+| Rebuild NixOS | `rebuild` (fish) |
+| Apply home-manager only | `hm` (fish) |
+| Free old generations | `cleanup` (fish) |
+| Backup everything | `nixpush` (NixOS) · `dotpush` (Arch/macOS) |
+
+`nixpush` / `dotpush` are the same idea per OS: commit a full snapshot of
+this repo and push to GitHub. No version counters or tags — every commit
+is a checkpoint, run them as often as you like.
 
 ## 🎨 Where to change what
 
 | I want to... | Go to |
 | --- | --- |
-| add / remove an app | `home.packages` in `home/kaan/caelestia.nix` |
-| change keybinds, apps on keys, gaps, blur | `hypr-vars.lua` in `home/kaan/caelestia.nix` |
-| add window rules | `hypr-user.lua` in `home/kaan/caelestia.nix` |
-| fix something in the upstream dots | add a patch in `patches/` |
-| shell look & behaviour | the Caelestia settings app (writes `shell.json`) |
+| add / remove an app (NixOS) | `home.packages` in `nixos/home/kaan/caelestia.nix` |
+| change keybinds, gaps, blur | `hypr-vars.lua` in `nixos/home/kaan/caelestia.nix` |
+| add window rules | `hypr-user.lua` in `nixos/home/kaan/caelestia.nix` |
+| change the boot menu | `boot.loader.limine` in `nixos/hosts/nixos/default.nix` |
+| edit kitty / fastfetch for all OSes | `dotfiles/kitty`, `dotfiles/fastfetch` |
+| change Arch setup | `arch/setup/` + `arch/README.md` |
+| fix something in the upstream dots | add a patch in `nixos/patches/` |
 
-## 🌱 Housekeeping
-
-- **Versioning** lives in `.version` (source of truth) and every successful
-  `rebuild` bumps it by one, tagging `nixos-<n>` and pushing it. The number
-  is independent of Nix generations, so it always counts up and cleanup can
-  never reset it.
-- `cleanup` deletes all old Nix generations and prunes old `nixos-*` tags
-  locally, keeping only the newest. GitHub keeps every tag forever. The
-  `.version` counter is untouched, so the next rebuild just continues from
-  where you left off.
-- Every `switch` creates a **generation** — a bootable snapshot. Keep a few
-  for safety, clean the rest with `cleanup`.
-
-## 🤍 Built with love, Nix, and way too much caffeine
+## 🤍 Built with love, Nix, Arch, and way too much caffeine
