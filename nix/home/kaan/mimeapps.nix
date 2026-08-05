@@ -25,6 +25,11 @@
       "x-scheme-handler/https" = [ "google-chrome.desktop" ];
       "x-scheme-handler/about" = [ "google-chrome.desktop" ];
       "x-scheme-handler/unknown" = [ "google-chrome.desktop" ];
+      # Return browser OAuth callbacks to GitHub Desktop. Keep these explicit:
+      # relying only on the package's desktop-entry cache is fragile on NixOS.
+      "x-scheme-handler/x-github-client" = [ "github-desktop.desktop" ];
+      "x-scheme-handler/x-github-desktop-auth" = [ "github-desktop.desktop" ];
+      "x-scheme-handler/x-github-desktop-dev-auth" = [ "github-desktop.desktop" ];
     };
   };
   xdg.configFile."mimeapps.list".force = true;

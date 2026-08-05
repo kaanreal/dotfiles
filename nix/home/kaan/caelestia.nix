@@ -9,7 +9,21 @@
 }:
 
 let
-  shell = caelestia-shell.packages.${pkgs.stdenv.hostPlatform.system}.with-cli;
+  baseShell = caelestia-shell.packages.${pkgs.stdenv.hostPlatform.system}.with-cli;
+  shell = baseShell.overrideAttrs (old: {
+    patches = (old.patches or [ ]) ++ [ ./caelestia-local-covers.patch ];
+  });
+
+  localCover = pkgs.writeShellApplication {
+    name = "caelestia-local-cover";
+    runtimeInputs = [
+      pkgs.coreutils
+      pkgs.ffmpeg
+      pkgs.findutils
+      pkgs.gnused
+    ];
+    text = builtins.readFile ../../../scripts/caelestia-local-cover.sh;
+  };
 
   quickshell =
     (caelestia-shell.inputs.quickshell.packages.${pkgs.stdenv.hostPlatform.system}.default.override {
@@ -48,7 +62,10 @@ in
     cli.enable = true;
   };
 
-  home.packages = [ qs ];
+  home.packages = [
+    qs
+    localCover
+  ];
 
   home.file = {
     # Make the shell QML discoverable by `qs -c caelestia` (quickshell looks

@@ -2,6 +2,11 @@ local vars = require("variables")
 local fn   = require("utils.functions")
 
 hl.on("hyprland.start", function()
+    -- This custom Hyprland session is not launched by a desktop-session unit,
+    -- so its graphical services are not pulled in automatically. Import the
+    -- live Wayland environment before starting Sunshine through its user unit.
+    hl.exec_cmd("sh -lc 'systemctl --user import-environment WAYLAND_DISPLAY XDG_CURRENT_DESKTOP XDG_SESSION_TYPE HYPRLAND_INSTANCE_SIGNATURE && systemctl --user start sunshine.service'")
+
     -- Start the shell first so a failure later in this chain cannot prevent it.
     hl.exec_cmd("qs -c caelestia -n -d")
 

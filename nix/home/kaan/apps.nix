@@ -29,7 +29,6 @@
     opencode
     google-chrome
     tailscale
-    github-desktop
     proton-vpn-cli
     spotify
     cava
@@ -58,7 +57,9 @@
     bat
     ripgrep
     jq
+    localsend
     # Provides `uvx`, used to launch nvibrant at Hyprland startup.
     uv
   ];
+
 }

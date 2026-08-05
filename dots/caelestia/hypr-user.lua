@@ -2,6 +2,8 @@
 -- Editable: changes here apply on shell restart (Ctrl+Super+Alt+R).
 hl.monitor({
     output   = "DP-1",
+    -- Keep this identical to the kernel console/Ly mode to avoid a black
+    -- display-mode transition when the graphical session starts.
     mode     = "2560x1440@180",
     position = "auto",
     scale    = 1,

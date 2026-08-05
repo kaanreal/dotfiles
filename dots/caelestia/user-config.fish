@@ -13,7 +13,8 @@ set -gx NH_OS_FLAKE $HOME/cozy-home
 # packages, services, drivers, modules, or system configuration. Dotfile
 # edits are already live (out-of-store links into ~/cozy-home/dots).
 function rebuild
-    nh os switch $HOME/cozy-home
+    set -l repo $HOME/cozy-home
+    nh os switch "path:$repo"
 end
 
 # Update Nix inputs (nixpkgs, home-manager, caelestia-shell, kernel) and
@@ -24,7 +25,7 @@ function update
     nix flake update --flake $repo
     or return 1
 
-    nh os switch $repo
+    nh os switch "path:$repo"
 end
 
 # Pull upstream Caelestia config changes into dots/ (vendored subtree).

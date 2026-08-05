@@ -67,6 +67,18 @@ in
 
   services.flatpak.enable = true;
   services.tailscale.enable = true;
+  services.pipewire.pulse.enable = true;
+  
+  services.sunshine = {
+    enable = true;
+    autoStart = true;
+    # Build with CUDA support so Nix embeds the NVIDIA driver runpath. This is
+    # required for NVENC when Sunshine runs through the CAP_SYS_ADMIN wrapper.
+    package = pkgs.sunshine.override { cudaSupport = true; };
+    capSysAdmin = true; # Required for KMS capture on Hyprland/Wayland.
+    openFirewall = true;
+  };
+  hardware.uinput.enable = true;
 
   # Windows SSD (Samsung 990 PRO) mounted at boot
   # ntfs-3g (FUSE) instead of ntfs3: more forgiving of dirty/hibernated volumes.
@@ -86,17 +98,24 @@ in
   # in nix/home/kaan/apps.nix).
 
   # Bootloader — Limine: one clean menu for NixOS + Arch + Windows.
-  # NixOS entries are generated per rebuild; Arch + Windows live in
-  # extraEntries, which Limine's installer re-appends to /boot/limine/limine.conf.
+  # Windows is prepended, NixOS generations are generated in the middle, and
+  # Arch is appended, giving the top-level order Windows -> NixOS -> Arch.
   boot.loader.systemd-boot.enable = false;
   boot.loader.efi.canTouchEfiVariables = true;
-  boot.loader.timeout = 5;
+  # Keep the multi-boot menu available without delaying every startup for 5s.
+  boot.loader.timeout = 2;
   boot.loader.limine.enable = true;
   boot.loader.limine.maxGenerations = 5;
+  # Disable NixOS' default bootloader wallpaper/logo for a clean text menu.
+  boot.loader.limine.style.wallpapers = [ ];
   boot.loader.limine.extraConfig = ''
     remember_last_entry: yes
     interface_branding: kaan
     interface_branding_colour: 7EBAE4
+
+    /Windows
+        protocol: efi_boot_entry
+        entry: Windows Boot Manager
   '';
   boot.loader.limine.extraEntries = ''
     /Arch Linux
@@ -104,11 +123,11 @@ in
         path: fslabel(archroot):/boot/vmlinuz-linux
         module_path: fslabel(archroot):/boot/initramfs-linux.img
         cmdline: root=LABEL=archroot rw
-
-    /Windows
-        protocol: efi_boot_entry
-        entry: Windows Boot Manager
   '';
+
+  # Give the kernel console (and therefore the TTY-based Ly greeter) the same
+  # mode as Hyprland, avoiding a display mode change during login.
+  boot.kernelParams = [ "video=DP-1:2560x1440@180" ];
 
   networking.hostName = "nixos";
   networking.networkmanager.enable = true;
@@ -150,6 +169,7 @@ in
       "video"
       "audio"
       "input"
+      "uinput"
     ];
   };
 

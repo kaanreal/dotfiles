@@ -1,0 +1,67 @@
+--- a/services/Players.qml
++++ b/services/Players.qml
+@@ -16,6 +16,7 @@ Singleton {
+     property alias manualActive: props.manualActive
+ 
+     // Dedup key for progressive metadata (e.g. mpv-mpris/yt-dlp player fills title then artist later).
++    property string localArtUrl: ""
+     property string lastNowPlayingKey: ""
+ 
+     function getIdentity(player: MprisPlayer): string {
+@@ -31,6 +32,8 @@ Singleton {
+         if (player.trackArtUrl)
+             return player.trackArtUrl;
+ 
++        if (player === root.active && root.localArtUrl)
++            return root.localArtUrl;
+         const url = player.metadata["xesam:url"] ?? "";
+         if (url.startsWith("https://www.youtube.com/watch")) {
+             // Fallback for youtube
+@@ -40,6 +43,22 @@ Singleton {
+         return "";
+     }
+ 
++    function refreshLocalArt(): void {
++        root.localArtUrl = "";
++        const player = root.active;
++        if (!player || player.trackArtUrl || !getIdentity(player).toLowerCase().includes("spotify"))
++            return;
++        coverLookup.command = ["caelestia-local-cover", player.trackArtist ?? "", player.trackTitle ?? ""];
++        coverLookup.running = true;
++    }
++
++    Process {
++        id: coverLookup
++        stdout: StdioCollector {
++            onStreamFinished: root.localArtUrl = text.trim()
++        }
++    }
++
+     // Quickshell only emits postTrackChanged when trackid/url/title change, so late
+     // artist updates (common with mpv-mpris + yt-dlp player) never retrigger it. Watch
+     // title/artist too and toast once both are usable.
+@@ -67,17 +86,23 @@ Singleton {
+         Toaster.toast(qsTr("Now Playing"), qsTr("%1 - %2").arg(artist).arg(title), "music_note");
+     }
+ 
+-    onActiveChanged: lastNowPlayingKey = ""
++    onActiveChanged: {
++        lastNowPlayingKey = "";
++        refreshLocalArt();
++    }
+ 
+     Connections {
+         function onPostTrackChanged(): void {
++            root.refreshLocalArt();
+             root.maybeToastNowPlaying();
+         }
+ 
+         function onTrackTitleChanged(): void {
++            root.refreshLocalArt();
+             root.maybeToastNowPlaying();
+         }
+ 
+         function onTrackArtistChanged(): void {
++            root.refreshLocalArt();
+             root.maybeToastNowPlaying();
+         }

@@ -16,6 +16,18 @@
     pkgs.xdg-desktop-portal-gtk
   ];
 
+  # Stable audio pacing: keep every PipeWire client on a 48 kHz,
+  # 1024-frame graph (~21.3 ms) instead of allowing buffer renegotiation that
+  # can produce pops when clients such as JamesDSP join or leave the graph.
+  services.pipewire.extraConfig.pipewire."92-stable-quantum" = {
+    context.properties = {
+      "default.clock.rate" = 48000;
+      "default.clock.quantum" = 1024;
+      "default.clock.min-quantum" = 1024;
+      "default.clock.max-quantum" = 1024;
+    };
+  };
+
   # Geolocation agent used by the Caelestia shell (weather etc.)
   services.geoclue2 = {
     enable = true;
