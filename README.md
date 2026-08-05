@@ -14,7 +14,7 @@ my dotfiles, and the Caelestia shell customizations, all in plain git files.
 | **NixOS** | Crucial SSD (shrunk to ~400G) | **Limine** (shared ESP) | Caelestia shell on Hyprland | ✅ daily driver |
 | **Arch** | Crucial SSD (~500G, label `archroot`) | Limine entry (`fslabel`) | minimal Hyprland (optional) | 🚧 install via `scripts/install-arch.sh` |
 | **Windows** | Samsung 990 PRO | Limine entry (chainload) | — | ✅ installed |
-| **macOS** | — | — | — | 📋 `scripts/install-macos.sh` ready |
+| **macOS** | Mac.fritz.box (Apple Silicon) | — | — | ✅ setup via `devices/macos/setup.sh` |
 
 ## 🗂️ Layout
 
@@ -30,19 +30,22 @@ my dotfiles, and the Caelestia shell customizations, all in plain git files.
 │   └── home/kaan/            # user config: apps, caelestia, dotfiles, mimeapps
 ├── dots/                     # the dotfiles (vendored caelestia + kaan overrides)
 │   ├── caelestia/            #   kaan: hypr-vars.lua, hypr-user.lua, cli.json…
-│   ├── hypr/ fish/ foot/ kitty/ fastfetch/ btop/ micro/ thunar/ starship.toml
+│   ├── fish/                 #   shared shell: config.fish, conf.d/, functions/
+│   ├── git/                  #   git identity + global ignore
+│   ├── hypr/ foot/ kitty/ fastfetch/ btop/ micro/ thunar/ starship.toml
 │   └── (upstream history via the caelestia-upstream remote)
 ├── devices/                  # non-NixOS setups
-│   ├── shared/               #   links the OS-agnostic dots (kitty, fastfetch…)
+│   ├── shared/               #   links the OS-agnostic dots (fish, kitty, fastfetch…)
 │   ├── linux/                #   Arch: install notes + setup.sh + setup/
-│   └── macos/                #   macOS: setup.sh + setup/
+│   └── macos/                #   macOS: setup.sh + README (config lives in dots/)
 └── scripts/                  # install-nixos, install-arch, install-macos,
                               # update-caelestia, backup
 ```
 
 On NixOS, `~/.config/*` are **out-of-store symlinks** into `~/cozy-home/dots`
-(see `nix/home/kaan/dotfiles.nix`). Editing a dotfile needs **no rebuild** —
-restart the app or shell and it's live.
+(see `nix/home/kaan/dotfiles.nix`). macOS links the exact same entries with
+`devices/shared/setup.sh`. Editing a dotfile needs **no rebuild** — restart
+the app or shell and it's live.
 
 ## 🌊 Caelestia upstream
 
@@ -86,7 +89,8 @@ No version counters or tags — every commit is a checkpoint.
 | add window rules / autostart | `dots/caelestia/hypr-user.lua` (live) |
 | change shell settings (apps, transparency…) | `dots/caelestia/shell.json` (live) |
 | change special-workspace apps | `dots/caelestia/cli.json` (live) |
-| change fish functions (`rebuild`, `save`, …) | `dots/caelestia/user-config.fish` (live) |
+| change fish functions (`rebuild`, `save`, …) | Nix-only: `dots/caelestia/user-config.fish` (live) · shared (`save`, `dots-update`): `dots/fish/functions/` (live) |
+| change shell colors / brew aliases on macOS | `dots/fish/conf.d/theme.fish`, `dots/fish/conf.d/darwin.fish` (live) |
 | change the boot menu | `boot.loader.limine` in `hosts/nixos-desktop/default.nix` |
 | change NixOS system packages | `nix/modules/packages.nix` |
 | edit kitty / fastfetch for all OSes | `dots/kitty`, `dots/fastfetch` |

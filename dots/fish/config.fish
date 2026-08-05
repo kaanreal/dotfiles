@@ -32,6 +32,9 @@ if status is-interactive
     abbr la 'ls -a'
     abbr lla 'ls -la'
 
+    # Jump to the repo
+    abbr dots 'cd $HOME/cozy-home'
+
     # Custom colours
     cat ~/.local/state/caelestia/sequences.txt 2> /dev/null
 

@@ -1,13 +1,14 @@
 #!/usr/bin/env bash
 #
-# kaan's macOS bootstrap (not yet applied — placeholder for the future
-# third machine). When that Mac arrives:
+# kaan's macOS bootstrap — one-shot on a fresh Mac:
 #
-#   1. Install the Command Line Tools:  xcode-select --install
-#   2. Run this script. It installs Homebrew, clones the cozy-home repo
-#      and links the shared dotfiles (kitty, fastfetch) from dots/.
-#   3. devices/macos/setup/ holds macOS-specific config (fish, starship,
-#      Dock, defaults); anything that also belongs on Linux goes in dots/.
+#   1. Install the Command Line Tools (xcode-select --install)
+#   2. Run this script: Homebrew, the cozy-home repo, and all shared links.
+#   3. Run ~/cozy-home/devices/macos/setup.sh --defaults for the macOS
+#      specifics (fish as login shell, Dock/Finder defaults).
+#
+# All dotfiles live centrally in dots/ and get symlinked into ~/.config —
+# the same files NixOS uses, kept in one place.
 
 set -euo pipefail
 
@@ -26,22 +27,8 @@ if [ ! -d "$REPO_DIR" ]; then
 fi
 
 echo "==> Linking shared dotfiles from dots/"
-mkdir -p "$HOME/.config"
-ln -sfn "$REPO_DIR/dots/kitty"      "$HOME/.config/kitty"
-ln -sfn "$REPO_DIR/dots/fastfetch"  "$HOME/.config/fastfetch"
-ln -sfn "$REPO_DIR/dots/starship.toml" "$HOME/.config/starship.toml"
-
-echo "==> Installing shared CLI tools"
-brew install --quiet \
-  git fish starship fastfetch btop eza ripgrep bat zoxide fzf \
-  neovim vim tmux htop
-
-echo "==> Installing macOS dotfiles"
-mkdir -p "$HOME/.config"
-cp -rn "$REPO_DIR/devices/macos/setup/fish"          "$HOME/.config/"
-ln -sfn "$REPO_DIR/devices/macos/setup/starship.toml" "$HOME/.config/starship.toml"
+"$REPO_DIR/devices/shared/setup.sh"
 
 echo
 echo "=== macOS bootstrap complete ==="
-echo "finish in Terminal settings: set the shell to /opt/homebrew/bin/fish"
-echo "then run:  ~/cozy-home/devices/macos/setup.sh --defaults"
+echo "next:  ~/cozy-home/devices/macos/setup.sh --defaults"
