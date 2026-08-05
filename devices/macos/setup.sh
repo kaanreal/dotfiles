@@ -11,7 +11,7 @@
 
 set -euo pipefail
 
-REPO="$(cd "$(dirname "$0")/.." && pwd)"
+REPO="$(cd "$(dirname "$0")/../.." && pwd)"
 
 echo "==> Linking shared dotfiles from dots/"
 "$REPO/devices/shared/setup.sh"

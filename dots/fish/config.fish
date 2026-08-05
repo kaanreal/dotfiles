@@ -35,8 +35,8 @@ if status is-interactive
     # Jump to the repo
     abbr dots 'cd $HOME/cozy-home'
 
-    # Custom colours
-    cat ~/.local/state/caelestia/sequences.txt 2> /dev/null
+    # Custom colours (raw, bypassing any cat alias)
+    command cat ~/.local/state/caelestia/sequences.txt 2> /dev/null
 
     # For jumping between prompts in foot terminal
     function mark_prompt_start --on-event fish_prompt

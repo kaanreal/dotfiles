@@ -64,6 +64,11 @@ only sourced on machines with Caelestia.
 | --- | --- |
 | change shell colors / abbrs / prompt | `dots/fish` (live) |
 | change brew aliases / macOS shell bits | `dots/fish/conf.d/darwin.fish` (live) |
+| change kitty look (font, opacity, cmd keys) | `dots/kitty/macos.conf` (live, macOS-only) |
 | edit kitty / fastfetch / btop / micro | `dots/...` (live) |
 | change git identity / excludes | `dots/git/config` (live) |
 | add a brew package | `devices/macos/setup.sh` |
+
+`dots/kitty/kitty.conf` ends with `include ${KITTY_OS}.conf`, so `macos.conf`
+is loaded only on macOS and `linux.conf` only on Linux — kitty tweaks never
+bleed between machines.

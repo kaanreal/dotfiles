@@ -94,6 +94,7 @@ No version counters or tags — every commit is a checkpoint.
 | change the boot menu | `boot.loader.limine` in `hosts/nixos-desktop/default.nix` |
 | change NixOS system packages | `nix/modules/packages.nix` |
 | edit kitty / fastfetch for all OSes | `dots/kitty`, `dots/fastfetch` |
+| tweak kitty just on macOS / Linux | `dots/kitty/macos.conf`, `dots/kitty/linux.conf` (live) |
 | set up Arch | `devices/linux/setup.sh` + `devices/linux/README.md` |
 | set up macOS | `devices/macos/setup.sh` + `devices/macos/README.md` |
 

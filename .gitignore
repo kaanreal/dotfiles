@@ -10,3 +10,6 @@ result-*
 *.swp
 *~
 .DS_Store
+
+# fish universal-variable store written through the ~/.config/fish symlink
+dots/fish/fish_variables

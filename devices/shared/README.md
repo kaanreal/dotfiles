@@ -6,7 +6,8 @@ linked from there:
 - `dots/fish` — the whole shell: prompt, colors, abbrs, shared commands
   (`save`, `dots-update`, `fastfetch`). macOS-specific bits are in
   `dots/fish/conf.d/darwin.fish` (auto-loaded only on macOS).
-- `dots/kitty`
+- `dots/kitty` — base config shared everywhere; per-OS tweaks via
+  `include ${KITTY_OS}.conf` → `dots/kitty/macos.conf` / `dots/kitty/linux.conf`
 - `dots/fastfetch`
 - `dots/btop`
 - `dots/micro`
