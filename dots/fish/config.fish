@@ -33,7 +33,7 @@ if status is-interactive
     abbr lla 'ls -la'
 
     # Jump to the repo
-    abbr dots 'cd $HOME/dotfiles'
+    abbr dots 'cd $HOME/cozy-home'
 
     # Custom colours (raw, bypassing any cat alias)
     command cat ~/.local/state/caelestia/sequences.txt 2> /dev/null
@@ -47,3 +47,7 @@ if status is-interactive
     set -q XDG_CONFIG_HOME && set -l cConf $XDG_CONFIG_HOME/caelestia || set -l cConf $HOME/.config/caelestia
     source $cConf/user-config.fish 2> /dev/null
 end
+
+# terminal-wakatime setup
+set -x PATH "$HOME/.wakatime" $PATH
+terminal-wakatime init fish | source
