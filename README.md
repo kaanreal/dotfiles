@@ -35,17 +35,18 @@ my dotfiles, and the Caelestia shell customizations, all in plain git files.
 │   ├── hypr/ foot/ kitty/ fastfetch/ btop/ micro/ thunar/ starship.toml
 │   └── (upstream history via the caelestia-upstream remote)
 ├── devices/                  # non-NixOS setups
-│   ├── shared/               #   links the OS-agnostic dots (fish, kitty, fastfetch…)
+│   ├── shared/               #   links the OS-agnostic dots/ (Arch, Windows…)
 │   ├── linux/                #   Arch: install notes + setup.sh + setup/
-│   └── macos/                #   macOS: setup.sh + README (config lives in dots/)
+│   └── macos/                #   macOS: independent dotfiles in dots/ + setup.sh
 └── scripts/                  # install-nixos, install-arch, install-macos,
                               # update-caelestia, backup
 ```
 
 On NixOS, `~/.config/*` are **out-of-store symlinks** into `~/cozy-home/dots`
-(see `nix/home/kaan/dotfiles.nix`). macOS links the exact same entries with
-`devices/shared/setup.sh`. Editing a dotfile needs **no rebuild** — restart
-the app or shell and it's live.
+(see `nix/home/kaan/dotfiles.nix`). macOS is fully independent: it links the
+same names into `~/cozy-home/devices/macos/dots` (`devices/macos/setup.sh`),
+so its configs are its own copies, not shared with NixOS. Editing a dotfile
+needs **no rebuild** — restart the app or shell and it's live.
 
 ## 🌊 Caelestia upstream
 
@@ -89,12 +90,12 @@ No version counters or tags — every commit is a checkpoint.
 | add window rules / autostart | `dots/caelestia/hypr-user.lua` (live) |
 | change shell settings (apps, transparency…) | `dots/caelestia/shell.json` (live) |
 | change special-workspace apps | `dots/caelestia/cli.json` (live) |
-| change fish functions (`rebuild`, `save`, …) | Nix-only: `dots/caelestia/user-config.fish` (live) · shared (`save`, `dots-update`): `dots/fish/functions/` (live) |
-| change shell colors / brew aliases on macOS | `dots/fish/conf.d/theme.fish`, `dots/fish/conf.d/darwin.fish` (live) |
+| change fish functions (`rebuild`, `save`, …) | Nix-only: `dots/caelestia/user-config.fish` (live) · shared (`save`, `dots-update`): `dots/fish/functions/` (live) · macOS (all): `devices/macos/dots/fish/functions/` (live) |
+| change shell colors / brew aliases on macOS | `devices/macos/dots/fish/conf.d/theme.fish`, `devices/macos/dots/fish/conf.d/darwin.fish` (live) |
 | change the boot menu | `boot.loader.limine` in `hosts/nixos-desktop/default.nix` |
 | change NixOS system packages | `nix/modules/packages.nix` |
-| edit kitty / fastfetch for all OSes | `dots/kitty`, `dots/fastfetch` |
-| tweak kitty just on macOS / Linux | `dots/kitty/macos.conf`, `dots/kitty/linux.conf` (live) |
+| edit kitty / fastfetch on NixOS | `dots/kitty`, `dots/fastfetch` |
+| edit kitty / fastfetch on macOS | `devices/macos/dots/kitty`, `devices/macos/dots/fastfetch` (live) |
 | set up Arch | `devices/linux/setup.sh` + `devices/linux/README.md` |
 | set up macOS | `devices/macos/setup.sh` + `devices/macos/README.md` |
 

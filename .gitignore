@@ -13,3 +13,4 @@ result-*
 
 # fish universal-variable store written through the ~/.config/fish symlink
 dots/fish/fish_variables
+devices/macos/dots/fish/fish_variables

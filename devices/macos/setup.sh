@@ -1,7 +1,9 @@
 #!/usr/bin/env bash
 #
-# kaan's macOS setup — links the central dotfiles from dots/ and applies
-# macOS-specific tweaks. Idempotent: safe to re-run any time.
+# kaan's macOS setup — links the independent macOS dotfiles from
+# devices/macos/dots/ and applies macOS-specific tweaks. The Mac is fully
+# self-contained: it does not use the shared dots/ that NixOS links.
+# Idempotent: safe to re-run any time.
 #
 # run:  ./devices/macos/setup.sh [--defaults]
 #
@@ -12,13 +14,29 @@
 set -euo pipefail
 
 REPO="$(cd "$(dirname "$0")/../.." && pwd)"
+DOTS="$REPO/devices/macos/dots"
 
-echo "==> Linking shared dotfiles from dots/"
-"$REPO/devices/shared/setup.sh"
+# BSD `ln -sfn` puts the link *inside* an existing directory instead of
+# replacing it, so move a real dir aside (as a .pre-cozy backup) first.
+link_dir() {
+  local src="$1" dst="$2"
+  if [ -L "$dst" ]; then
+    rm -f "$dst"
+  elif [ -d "$dst" ]; then
+    mv "$dst" "$dst.pre-cozy"
+  fi
+  ln -s "$src" "$dst"
+}
 
-echo "==> Linking macOS git config"
-ln -sfn "$REPO/dots/git/config"        "$HOME/.gitconfig"
-ln -sfn "$REPO/dots/git/ignore_global" "$HOME/.gitignore_global"
+echo "==> Linking macOS dotfiles from devices/macos/dots/"
+mkdir -p "$HOME/.config"
+for c in fish kitty fastfetch btop micro; do
+  link_dir "$DOTS/$c" "$HOME/.config/$c"
+done
+
+ln -sfn "$DOTS/starship.toml"        "$HOME/.config/starship.toml"
+ln -sfn "$DOTS/git/gitconfig"        "$HOME/.gitconfig"
+ln -sfn "$DOTS/git/gitignore_global" "$HOME/.gitignore_global"
 
 echo "==> Installing CLI tools (idempotent)"
 if command -v brew >/dev/null; then
@@ -56,4 +74,4 @@ fi
 
 echo
 echo "=== macOS setup complete ==="
-echo "open a new terminal — fish is running your central ~/cozy-home dotfiles."
+echo "open a new terminal — fish is running your independent ~/cozy-home macOS dotfiles."

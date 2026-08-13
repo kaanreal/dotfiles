@@ -3,12 +3,13 @@
 # kaan's macOS bootstrap — one-shot on a fresh Mac:
 #
 #   1. Install the Command Line Tools (xcode-select --install)
-#   2. Run this script: Homebrew, the cozy-home repo, and all shared links.
+#   2. Run this script: Homebrew and the cozy-home repo.
 #   3. Run ~/cozy-home/devices/macos/setup.sh --defaults for the macOS
-#      specifics (fish as login shell, Dock/Finder defaults).
+#      specifics (symlinks, brew CLI tools, fish as login shell, Dock/Finder
+#      defaults).
 #
-# All dotfiles live centrally in dots/ and get symlinked into ~/.config —
-# the same files NixOS uses, kept in one place.
+# macOS keeps its own independent dotfiles in devices/macos/dots/ and does
+# not share the Linux dots/ that NixOS uses.
 
 set -euo pipefail
 
@@ -26,9 +27,5 @@ if [ ! -d "$REPO_DIR" ]; then
   git clone "$REPO_URL" "$REPO_DIR"
 fi
 
-echo "==> Linking shared dotfiles from dots/"
-"$REPO_DIR/devices/shared/setup.sh"
-
-echo
-echo "=== macOS bootstrap complete ==="
-echo "next:  ~/cozy-home/devices/macos/setup.sh --defaults"
+echo "==> Repo cloned — next step links dotfiles"
+echo "    run:  ~/cozy-home/devices/macos/setup.sh --defaults"

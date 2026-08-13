@@ -1,30 +1,28 @@
 # macOS
 
 The second (non-Nix) machine in the cozy-home setup. There is no Nix here —
-everything is plain git files in `~/cozy-home` linked from `dots/`, exactly
-like on NixOS.
-
-The old `devices/macos/setup/fish/` approach is gone: **fish lives centrally
-in `dots/fish/`** and is symlinked to `~/.config/fish` like every other shared
-app. macOS-specific shell bits are auto-loaded from
-`dots/fish/conf.d/darwin.fish` (brew env, brew abbrs, `clearfetch`).
+everything is plain git files in `~/cozy-home`. The Mac is **fully
+independent**: its dotfiles live in `devices/macos/dots/` as its own copies,
+not shared with the NixOS `dots/`. `save` snapshots the whole repo, so every
+time you save, your Mac dotfiles are checkpointed from that dir.
 
 ## How it works
 
 ```
-~/.config/fish        -> ~/cozy-home/dots/fish            (prompt, colors, abbrs,
-                                                           save / dots-update / fastfetch)
-~/.config/kitty       -> ~/cozy-home/dots/kitty
-~/.config/fastfetch   -> ~/cozy-home/dots/fastfetch
-~/.config/btop        -> ~/cozy-home/dots/btop
-~/.config/micro       -> ~/cozy-home/dots/micro
-~/.config/starship.toml -> ~/cozy-home/dots/starship.toml
-~/.gitconfig          -> ~/cozy-home/dots/git/config
-~/.gitignore_global   -> ~/cozy-home/dots/git/ignore_global
+~/.config/fish          -> ~/cozy-home/devices/macos/dots/fish
+~/.config/kitty         -> ~/cozy-home/devices/macos/dots/kitty
+~/.config/fastfetch     -> ~/cozy-home/devices/macos/dots/fastfetch
+~/.config/btop          -> ~/cozy-home/devices/macos/dots/btop
+~/.config/micro         -> ~/cozy-home/devices/macos/dots/micro
+~/.config/starship.toml -> ~/cozy-home/devices/macos/dots/starship.toml
+~/.gitconfig            -> ~/cozy-home/devices/macos/dots/git/gitconfig
+~/.gitignore_global     -> ~/cozy-home/devices/macos/dots/git/gitignore_global
 ```
 
-Editing a dotfile needs no re-run — restart the app (or open a new shell)
-and it's live.
+Because the links point at the repo, editing a dotfile — either in
+`~/.config/...` or directly in `devices/macos/dots/...` — is the same file.
+`save` commits everything. Restart the app (or open a new shell) and it's
+live.
 
 ## Setup
 
@@ -45,14 +43,15 @@ refresh the symlinks.
 
 ## Commands
 
-Same as NixOS for the shared, OS-agnostic ones:
+The `save` / `dots-update` / `dots` commands exist here too, defined in
+`devices/macos/dots/fish/functions/`:
 
-| Command | What it does |
-| --- | --- |
-| `save` | commit + push a snapshot of `~/cozy-home` (shared with NixOS) |
-| `dots-update` | pull upstream Caelestia dots (shared with NixOS) |
-| `dots` | `cd ~/cozy-home` |
-| `up` / `in` / `un` / `se` | brew upgrade+cleanup / install / uninstall / search |
+| Command                   | What it does                                                      |
+| ------------------------- | ----------------------------------------------------------------- |
+| `save`                    | commit + push a snapshot of `~/cozy-home` (Mac dotfiles included) |
+| `dots-update`             | pull upstream Caelestia dots                                      |
+| `dots`                    | `cd ~/cozy-home`                                                  |
+| `up` / `in` / `un` / `se` | brew upgrade+cleanup / install / uninstall / search               |
 
 The Nix-only commands (`rebuild`, `update`, `cleanup`) intentionally don't
 exist here — they're defined in `dots/caelestia/user-config.fish`, which is
@@ -60,15 +59,12 @@ only sourced on machines with Caelestia.
 
 ## Where to change what
 
-| I want to... | Go to |
-| --- | --- |
-| change shell colors / abbrs / prompt | `dots/fish` (live) |
-| change brew aliases / macOS shell bits | `dots/fish/conf.d/darwin.fish` (live) |
-| change kitty look (font, opacity, cmd keys) | `dots/kitty/macos.conf` (live, macOS-only) |
-| edit kitty / fastfetch / btop / micro | `dots/...` (live) |
-| change git identity / excludes | `dots/git/config` (live) |
-| add a brew package | `devices/macos/setup.sh` |
-
-`dots/kitty/kitty.conf` ends with `include ${KITTY_OS}.conf`, so `macos.conf`
-is loaded only on macOS and `linux.conf` only on Linux — kitty tweaks never
-bleed between machines.
+| I want to...                                | Go to                                               |
+| ------------------------------------------- | --------------------------------------------------- |
+| change shell colors / abbrs / prompt        | `devices/macos/dots/fish` (live)                    |
+| change brew aliases / macOS shell bits      | `devices/macos/dots/fish/conf.d/darwin.fish` (live) |
+| change kitty look (font, opacity, cmd keys) | `devices/macos/dots/kitty/kitty.conf` (live)        |
+| change fastfetch (logo / modules)           | `devices/macos/dots/fastfetch/config.jsonc` (live)  |
+| edit btop / micro / starship                | `devices/macos/dots/...` (live)                     |
+| change git identity / excludes              | `devices/macos/dots/git/gitconfig` (live)           |
+| add a brew package                          | `devices/macos/setup.sh`                            |
