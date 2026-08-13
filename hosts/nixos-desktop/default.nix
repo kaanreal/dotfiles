@@ -311,7 +311,7 @@ in
   # With `flake` set, no paths or hostnames are needed.
   programs.nh = {
     enable = true;
-    flake = "/home/kaan/cozy-home";
+    flake = "/home/kaan/dotfiles";
     clean = {
       enable = true;
       extraArgs = "--keep-since 7d --keep 5";

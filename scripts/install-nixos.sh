@@ -7,13 +7,13 @@
 #     into hosts/nixos-desktop/hardware-configuration.nix.
 #  3. Run this script as the user:  ./scripts/install-nixos.sh
 #
-# It clones cozy-home and builds/activates the system. Afterwards the
+# It clones dotfiles and builds/activates the system. Afterwards the
 # daily-driver commands (rebuild / update / save) work via `nh os switch`.
 
 set -euo pipefail
 
-REPO_URL=https://github.com/kaanreal/cozy-home.git
-REPO_DIR=/home/kaan/cozy-home
+REPO_URL=https://github.com/kaanreal/dotfiles.git
+REPO_DIR=/home/kaan/dotfiles
 
 if [[ $EUID -eq 0 ]]; then
   echo "run this as the user, not root" >&2
@@ -21,7 +21,7 @@ if [[ $EUID -eq 0 ]]; then
 fi
 
 if [[ ! -d "$REPO_DIR/.git" ]]; then
-  echo "==> Cloning cozy-home"
+  echo "==> Cloning dotfiles"
   git clone "$REPO_URL" "$REPO_DIR"
 fi
 
@@ -33,4 +33,4 @@ nixos-rebuild switch --flake .#nixos
 echo
 echo "=== NixOS ready ==="
 echo "Next: set a hostname/user password if needed, then everything lives"
-echo "in ~/cozy-home — run 'rebuild' / 'update' / 'save' from any shell."
+echo "in ~/dotfiles — run 'rebuild' / 'update' / 'save' from any shell."

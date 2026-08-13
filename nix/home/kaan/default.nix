@@ -3,7 +3,7 @@
 {
   imports = [
     ./caelestia.nix
-    ./apps.nix
+    ./packages.nix
     ./dotfiles.nix
     ./mimeapps.nix
   ];

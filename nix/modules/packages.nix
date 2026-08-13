@@ -10,7 +10,7 @@
     ripgrep
     jq
 
-   pulseaudio
+    pulseaudio
 
     # Windows SSD mount
     ntfs3g

@@ -2,8 +2,13 @@
     "name": "caelestiafox",
     "version": "0.0.1",
     "license": "GPL-3.0-only",
+    "scripts": {
+        "build": "tsc",
+        "lint": "web-ext lint"
+    },
     "devDependencies": {
         "@types/firefox-webext-browser": "^120.0.4",
+        "typescript": "^5.7.2",
         "web-ext": "^8.4.0"
     }
 }

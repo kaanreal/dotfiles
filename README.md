@@ -1,106 +1,73 @@
-# 🏡 cozy-home
+# 📁dotfiles.
 
-One cozy repo for every machine I own — NixOS system config, Home Manager,
-my dotfiles, and the Caelestia shell customizations, all in plain git files.
+One repo for every machine I own.
 
-> “Everything in one place. Everything rebuildable. Everything *mine*.”
+## Devices
+
+| OS          | Where               | Bootloader               | Desktop               | State                  |
+| ----------- | ------------------- | ------------------------ | --------------------- | ---------------------- |
+| **NixOS**   | NVMe 2 (~400 GB)    | **Limine** (shared ESP)  | Caelestia on Hyprland | learning purposes      |
+| **Arch**    | NVMe 2 (`archroot`) | Limine entry (`fslabel`) | Hyprland and Xfwm4    | daily driver           |
+| **Windows** | NVMe 1              | Limine entry (chainload) | Explorer              | forced daily driver... |
+| **macOS**   | in my bag?          | Apple                    | Quartz                | everyday tasks         |
+
+## Layout
+
+```
+~/dotfiles
+├── flake.nix                 # NixOS + home-manager entry point
+├── hosts/nixos-desktop/      # NixOS host, hardware, boot, GPU, and nh
+├── nix/
+│   ├── modules/              # system modules
+│   └── home/kaan/            # Home Manager configuration
+├── dots/                     # vendored Caelestia dots plus local overrides
+├── devices/
+│   ├── shared/               # shared dotfiles
+│   └── macos/                # independent macOS dots
+└── scripts/                  # install, update, backup, and helper scripts
+```
+
+NixOS uses Home Manager out-of-store symlinks into `dots/`, so most dotfile
+changes take effect after restarting or reloading the relevant application.
+macOS links its independent copies from `devices/macos/dots/`.
+
+## 🌊Caelestia upstream
+
+`dots/` is a vendored copy of [caelestia-dots/caelestia](https://github.com/caelestia-dots/caelestia),
+with my patches and overrides baked on top. The original stays reachable
+as the `caelestia-upstream` remote, so fixes keep flowing in:
+
+| Task                            | Command                                               |
+| ------------------------------- | ----------------------------------------------------- |
+| Pull upstream dots into `dots/` | `dots-update` (fish) or `scripts/update-caelestia.sh` |
+| Resolve a conflicted dotfile    | fix it in `dots/…`, then `save`                       |
+
+`dots-update` fetches upstream and runs `git subtree pull`. It requires a clean
+working tree and stops for manual resolution if a merge conflicts.
+
+## Shortcuts
+
+| Task                     | Command                           |
+| ------------------------ | --------------------------------- |
+| Rebuild NixOS (+ home)   | `rebuild` (fish) → `nh os switch` |
+| Update nixpkgs + rebuild | `update` (fish)                   |
+| Pull upstream dotfiles   | `dots-update` (fish)              |
+| Commit + push everything | `save` (fish)                     |
+| Free old generations     | `cleanup` (fish) → `nh clean all` |
+| Backup the repo          | `scripts/backup.sh`               |
+
+`save` stages the whole repository, creates a timestamped snapshot commit, and
+pushes it to `origin`. It exits without committing when nothing changed.
+Commit subjects use a random cozy emoji
+followed by the local date and time, for example `🧸 2026-08-04 21:30:12`.##
 
 ---
 
-## 🗺️ The machines
+<div align="center">
 
-| OS | Where | Bootloader | Desktop | State |
-| --- | --- | --- | --- | --- |
-| **NixOS** | Crucial SSD (shrunk to ~400G) | **Limine** (shared ESP) | Caelestia shell on Hyprland | ✅ daily driver |
-| **Arch** | Crucial SSD (~500G, label `archroot`) | Limine entry (`fslabel`) | minimal Hyprland (optional) | 🚧 install via `scripts/install-arch.sh` |
-| **Windows** | Samsung 990 PRO | Limine entry (chainload) | — | ✅ installed |
-| **macOS** | Mac.fritz.box (Apple Silicon) | — | — | ✅ setup via `devices/macos/setup.sh` |
+<img width=300 src="https://github.com/kaanreal/Kaanreal/raw/main/assets/main.gif"/>
 
-## 🗂️ Layout
+## Built by me , bye.
 
-```
-~/cozy-home
-├── flake.nix                 # NixOS + home-manager entry point
-├── hosts/                    # per-machine host configs
-│   ├── nixos-desktop/        #   ✅ NixOS: hardware + boot + GPU + nh
-│   ├── arch-desktop/         #   (no flake yet — plain Arch, see devices/linux)
-│   └── macbook/              #   (no flake yet — see devices/macos)
-├── nix/
-│   ├── modules/              # system modules: base, desktop, gpu, packages
-│   └── home/kaan/            # user config: apps, caelestia, dotfiles, mimeapps
-├── dots/                     # the dotfiles (vendored caelestia + kaan overrides)
-│   ├── caelestia/            #   kaan: hypr-vars.lua, hypr-user.lua, cli.json…
-│   ├── fish/                 #   shared shell: config.fish, conf.d/, functions/
-│   ├── git/                  #   git identity + global ignore
-│   ├── hypr/ foot/ kitty/ fastfetch/ btop/ micro/ thunar/ starship.toml
-│   └── (upstream history via the caelestia-upstream remote)
-├── devices/                  # non-NixOS setups
-│   ├── shared/               #   links the OS-agnostic dots/ (Arch, Windows…)
-│   ├── linux/                #   Arch: install notes + setup.sh + setup/
-│   └── macos/                #   macOS: independent dotfiles in dots/ + setup.sh
-└── scripts/                  # install-nixos, install-arch, install-macos,
-                              # update-caelestia, backup
-```
-
-On NixOS, `~/.config/*` are **out-of-store symlinks** into `~/cozy-home/dots`
-(see `nix/home/kaan/dotfiles.nix`). macOS is fully independent: it links the
-same names into `~/cozy-home/devices/macos/dots` (`devices/macos/setup.sh`),
-so its configs are its own copies, not shared with NixOS. Editing a dotfile
-needs **no rebuild** — restart the app or shell and it's live.
-
-## 🌊 Caelestia upstream
-
-`dots/` is a vendored copy of [caelestia-dots/caelestia](https://github.com/caelestia-dots/caelestia),
-with kaan's patches and overrides baked on top. The original stays reachable
-as the `caelestia-upstream` remote, so fixes keep flowing in:
-
-| Task | Command |
-| --- | --- |
-| Pull upstream dots into `dots/` | `dots-update` (fish) or `scripts/update-caelestia.sh` |
-| Resolve a conflicted dotfile | fix it in `dots/…`, then `save` |
-
-`dots-update` fetches upstream and does a `git subtree pull` — it refuses to
-run on an uncommitted tree, never force-resets, and never silently overwrites
-your local edits. On a conflict it stops and shows you the files.
-
-## 🚀 Daily life
-
-| Task | Command |
-| --- | --- |
-| Rebuild NixOS (+ home) | `rebuild` (fish) → `nh os switch` |
-| Update nixpkgs + rebuild | `update` (fish) |
-| Pull upstream dotfiles | `dots-update` (fish) |
-| Commit + push everything | `save` (fish) |
-| Free old generations | `cleanup` (fish) → `nh clean all` |
-| Backup the repo | `scripts/backup.sh` |
-| Edit a keybind / app config | edit `dots/…` directly, reload Hyprland (`hyprctl reload`) |
-
-`save` commits a full snapshot of the repo (system config **and** dots
-together — one place, one history) and pushes it to `origin`. It skips the
-commit and push when nothing changed. Commit subjects use a random cozy emoji
-followed by the local date and time, for example `🧸 2026-08-04 21:30:12`.
-No version counters or tags — every commit is a checkpoint.
-
-## 🎨 Where to change what
-
-| I want to... | Go to |
-| --- | --- |
-| add / remove an app | `home.packages` in `nix/home/kaan/apps.nix` |
-| change keybinds, gaps, blur | `dots/caelestia/hypr-vars.lua` (live) |
-| add window rules / autostart | `dots/caelestia/hypr-user.lua` (live) |
-| change shell settings (apps, transparency…) | `dots/caelestia/shell.json` (live) |
-| change special-workspace apps | `dots/caelestia/cli.json` (live) |
-| change fish functions (`rebuild`, `save`, …) | Nix-only: `dots/caelestia/user-config.fish` (live) · shared (`save`, `dots-update`): `dots/fish/functions/` (live) · macOS (all): `devices/macos/dots/fish/functions/` (live) |
-| change shell colors / brew aliases on macOS | `devices/macos/dots/fish/conf.d/theme.fish`, `devices/macos/dots/fish/conf.d/darwin.fish` (live) |
-| change the boot menu | `boot.loader.limine` in `hosts/nixos-desktop/default.nix` |
-| change NixOS system packages | `nix/modules/packages.nix` |
-| edit kitty / fastfetch on NixOS | `dots/kitty`, `dots/fastfetch` |
-| edit kitty / fastfetch on macOS | `devices/macos/dots/kitty`, `devices/macos/dots/fastfetch` (live) |
-| set up Arch | `devices/linux/setup.sh` + `devices/linux/README.md` |
-| set up macOS | `devices/macos/setup.sh` + `devices/macos/README.md` |
-
-## 🖼️ Screenshots
-
-*coming soon — Caelestia shell, Hyprland, the works.*
-
-## 🤍 Built with love, Nix, Arch, and way too much caffeine
+<a href="https://buymeacoffee.com/kaandev">
+<img src="https://img.shields.io/badge/☕%20buy%20me%20a%20coffee-FFE082?style=for-the-badge&logo=buymeacoffee&logoColor=black"/>

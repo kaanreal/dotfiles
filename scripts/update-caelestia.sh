@@ -16,16 +16,12 @@ set -euo pipefail
 cd "$(cd "$(dirname "$0")/.." && pwd)"   # repo root
 
 if ! git rev-parse --git-dir >/dev/null 2>&1; then
-  echo "error: not a git repository (run from ~/cozy-home)" >&2
+  echo "error: not a git repository (run from ~/dotfiles)" >&2
   exit 1
 fi
 
-if ! git diff --quiet; then
-  echo "error: uncommitted changes — commit or stash them first" >&2
-  exit 1
-fi
-if ! git diff --cached --quiet; then
-  echo "error: staged changes — commit or stash them first" >&2
+if [[ -n "$(git status --porcelain)" ]]; then
+  echo "error: working tree is not clean — commit or stash changes first" >&2
   exit 1
 fi
 

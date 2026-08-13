@@ -2,15 +2,16 @@
 # git fetch + subtree pull; no resets, no discarding conflicts.
 # Works on any OS — shared with NixOS.
 function dots-update
-    set -l repo $HOME/cozy-home
+    set -l repo $HOME/dotfiles
 
-    if not git -C $repo diff --quiet
-        echo "cozy-home has uncommitted changes; commit or stash them first"
+    if not test -d $repo/.git
+        echo "~/dotfiles is not a git repository"
         return 1
     end
 
-    if not git -C $repo diff --cached --quiet
-        echo "cozy-home has staged changes; commit or stash them first"
+    set -l changes (git -C $repo status --porcelain | string collect)
+    if test -n "$changes"
+        echo "dotfiles is not clean; commit or stash changes first"
         return 1
     end
 
@@ -19,7 +20,7 @@ function dots-update
 
     git -C $repo subtree pull --prefix dots caelestia-upstream main
     or begin
-        echo "merge needs attention; resolve the conflicts in ~/cozy-home/dots"
+        echo "merge needs attention; resolve the conflicts in ~/dotfiles/dots"
         return 1
     end
 

@@ -1,14 +1,14 @@
-# Commit + push a snapshot of ~/cozy-home (no empty commits, no force-push).
+# Commit + push a snapshot of ~/dotfiles (no empty commits, no force-push).
 # Works on any OS — shared with NixOS.
 function save
-    set -l repo $HOME/cozy-home
+    set -l repo $HOME/dotfiles
 
     if not test -d $repo/.git
-        echo "skip: ~/cozy-home is not a git repository"
+        echo "skip: ~/dotfiles is not a git repository"
         return 1
     end
 
-    echo "==> saving ~/cozy-home"
+    echo "==> saving ~/dotfiles"
 
     git -C $repo add -A
     or begin

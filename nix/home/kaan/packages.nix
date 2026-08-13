@@ -40,7 +40,6 @@
     vscode
     vim
     neovim
-    vimPlugins.LazyVim
     vesktop
     zenity
     unzip

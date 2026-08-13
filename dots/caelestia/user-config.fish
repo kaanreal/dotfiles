@@ -11,20 +11,20 @@ set -gx PATH $HOME/.local/bin $PATH
 # nh >= 4.4 dropped current-directory flake detection; bare `nh os switch`
 # now only falls back to /etc/nixos. Point it at this repo so update/rebuild
 # work from any directory.
-set -gx NH_OS_FLAKE $HOME/cozy-home
+set -gx NH_OS_FLAKE $HOME/dotfiles
 
 # Apply the system config (system + home) from this repo. Only for Nix
 # packages, services, drivers, modules, or system configuration. Dotfile
-# edits are already live (out-of-store links into ~/cozy-home/dots).
+# edits are already live (out-of-store links into ~/dotfiles/dots).
 function rebuild
-    set -l repo $HOME/cozy-home
+    set -l repo $HOME/dotfiles
     nh os switch "path:$repo"
 end
 
 # Update Nix inputs (nixpkgs, home-manager, caelestia-shell, kernel) and
 # rebuild. Does not touch the dots.
 function update
-    set -l repo $HOME/cozy-home
+    set -l repo $HOME/dotfiles
 
     nix flake update --flake $repo
     or return 1
