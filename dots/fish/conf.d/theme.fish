@@ -7,10 +7,10 @@
 if status is-interactive
     if not test -f ~/.local/state/caelestia/sequences.txt
         # beige theme
-        set -g fish_color_normal "#e8e6e3"
-        set -g fish_color_command "#C15F3C"
+        set -g fish_color_normal "#d4a96a"
+        set -g fish_color_command "#d4a96a"
         set -g fish_color_param "#d4a96a"
-        set -g fish_color_error "#C15F3C"
+        set -g fish_color_error "#d4a96a"
         set -g fish_color_quote "#7db87d"
         set -g fish_color_redirection "#7a9ec2"
         set -g fish_color_end "#9a9389"
