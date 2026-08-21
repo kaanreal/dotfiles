@@ -1,0 +1,70 @@
+# HATS-2026-06-17-c4f822a
+# HATS Pack Summary
+
+**Generated on:** 17-06-2026 14:09:10 UTC
+**Builder Version:** 2.0.1-GUI
+**Content Hash:** c4f822a
+**Supported Firmware:** Up to 22.5.0
+
+---
+
+## CHANGELOG (What's New Since Last Build)
+
+### Version Updates:
+- **Atmosphere:** 1.11.1 → **1.11.2**
+- **Disable remap dialog:** v1.0.12 → **v1.0.13**
+- **FuseCheck:** 1.0.3 → **1.0.4**
+- **Hekatos:** v6.5.2 → **6.5.3**
+- **Sys-patch:** v1.6.2.0 → **v1.6.2.3**
+
+---
+
+## INCLUDED COMPONENTS
+
+### ESSENTIAL
+- **Atmosphere** (1.11.2) - Atmosphere-NX/Atmosphere
+- **Hekatos** (6.5.3) - sthetix/hekatos
+
+### HOMEBREW APPS
+- **Cyberfoil** (1.4.5) - luketanti/CyberFoil
+- **DBI English (Unofficial)** (895) - rashevskyv/DBIPatcher
+- **DBI RU** (DBI.900.ru) - sthetix/dbi
+- **Daybreak** (1.0.0) - sthetix/daybreak
+- **Goldleaf** (1.2.0) - XorTroll/Goldleaf
+- **HATS-Tools** (1.6.3) - sthetix/HATS-Tools
+- **JKSV** (12/02/2025) - J-D-K/JKSV
+- **Linkalho** (v2.0.2) - impeeza/linkalho
+- **NxThemeInstaller** (nxt-2.9) - exelix11/SwitchThemeInjector
+- **Sphaira** (1.0.0) - ITotalJustice/sphaira
+- **Switch 90DNS Tester** (v1.1.0) - meganukebmp/Switch_90DNS_tester
+- **Tinwoo Installer** (1.0.28) - mrdude2478/Tinwoo-Release
+
+### PATCHES
+- **Disable remap dialog** (v1.0.13) - ndeadly/disable_remap_dialog
+- **SaltyNX** (1.8.1) - masagrator/SaltyNX
+- **Theme-Patches** (N/A) - https://github.com/exelix11/theme-patches/archive/refs/heads/master.zip
+- **nx-ovlloader** (v2.0.2) - ppkantorski/nx-ovlloader
+
+### PAYLOADS
+- **DowngradeFixer** (1.0.1) - sthetix/DowngradeFixer
+- **FuseCheck** (1.0.4) - sthetix/FuseCheck
+- **Lockpick_RCM_Pro** (2.0.3) - sthetix/Lockpick_RCM_Pro
+- **NetMan** (2.0.0) - sthetix/NetMan
+- **ProdinForge** (1.0.0) - sthetix/ProdinForge
+- **TegraExplorer-Ext** (v4.2.2) - sthetix/TegraExplorer-Ext
+
+### TESLA OVERLAYS
+- **Edizon Overlay** (v1.0.15) - proferabg/EdiZon-Overlay
+- **FPSLocker** (3.3.2) - masagrator/FPSLocker
+- **QuickNTP** (1.6.0) - nedex/QuickNTP
+- **Status Monitor Overlay** (1.4.1) - masagrator/Status-Monitor-Overlay
+- **Sys-patch** (v1.6.2.3) - borntohonk/sys-patch
+- **Sysmodules Overlay** (v1.5.2) - ppkantorski/ovl-sysmodules
+- **Ultrahand Overlay** (v2.4.5) - ppkantorski/Ultrahand-Overlay
+- **emuiibo** (1.1.3) - XorTroll/emuiibo
+- **sys-clk** (2.0.1+r25) - ppkantorski/sys-clk
+- **sys-clk base files** (2.0.1) - retronx-team/sys-clk
+
+---
+
+<sub>Generated with HATSKit Pro Builder</sub>
