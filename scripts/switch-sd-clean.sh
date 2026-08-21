@@ -53,7 +53,6 @@ if "$deep_clean"; then
     "$volume/atmosphere/logs"
     "$volume/retroarch/logs"
     "$volume/switch/Goldleaf/export/temp"
-    "$volume/switch/DBI/dumps"
     "$volume/switch/DBI/logs"
     "$volume/switch/appstore/.get/tmp"
     "$volume/switch/Cemu/cache"
