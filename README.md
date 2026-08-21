@@ -10,6 +10,7 @@ One repo for every machine I own.
 | **Arch**    | NVMe 2 (`archroot`) | Limine entry (`fslabel`) | Hyprland and Xfwm4    | daily driver           |
 | **Windows** | NVMe 1              | Limine entry (chainload) | Explorer              | forced daily driver... |
 | **macOS**   | in my bag?          | Apple                    | Quartz                | everyday tasks         |
+| **Switch**  | 80 GB microSD       | Hekate                   | Atmosphere            | CFW config snapshot    |
 
 ## Layout
 
@@ -23,7 +24,8 @@ One repo for every machine I own.
 ├── dots/                     # vendored Caelestia dots plus local overrides
 ├── devices/
 │   ├── shared/               # shared dotfiles
-│   └── macos/                # independent macOS dots
+│   ├── macos/                # independent macOS dots
+│   └── switch/               # lightweight CFW configuration snapshot
 └── scripts/                  # install, update, backup, and helper scripts
 ```
 

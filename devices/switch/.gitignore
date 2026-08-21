@@ -1,0 +1,43 @@
+# console secrets and identity backups
+sd/**/*keys*
+sd/**/*token*
+sd/**/*cert*
+sd/**/*prodinfo*
+sd/**/*PRODINFO*
+sd/**/*BISKEYS*
+
+# installed software, firmware, payloads, themes, and media
+sd/**/*.bin
+sd/**/*.kip
+sd/**/*.nca
+sd/**/*.nro
+sd/**/*.nsp
+sd/**/*.nxtheme
+sd/**/*.ovl
+sd/**/*.szs
+sd/**/*.xci
+sd/**/*.zip
+sd/**/*.7z
+sd/**/*.jpg
+sd/**/*.jpeg
+sd/**/*.png
+sd/**/*.webp
+
+# large or personal trees
+sd/Nintendo/
+sd/JKSV/
+sd/avatars/
+sd/backup/
+sd/emuMMC/RAW*/
+sd/retroarch/
+sd/switch/
+sd/themes/
+sd/tico/
+
+# generated junk
+sd/**/._*
+sd/**/.DS_Store
+sd/**/*.log
+sd/**/cache/
+sd/**/logs/
+sd/**/tmp/
