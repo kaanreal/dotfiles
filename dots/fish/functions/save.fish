@@ -21,7 +21,7 @@ function save
         return 0
     end
 
-    set -l emojis '🌸' '🌷' '🍃' '🧁' '🐰' '🫧' '❄️' '🧸' '🍓' '🐈'
+    set -l emojis '🌸' '🌷' '🍃' '🧁' '🐰' '❄️' '🧸' '🍓' '🐈'
     set -l emoji $emojis[(random 1 (count $emojis))]
     set -l msg "$emoji "(date '+%F %H:%M:%S')
     git -C $repo commit -m "$msg"
