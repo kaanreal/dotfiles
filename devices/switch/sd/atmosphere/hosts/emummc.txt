@@ -1,0 +1,52 @@
+# ============================================================
+#  NEXTENDO NETWORK - Atmosphere DNS-MITM (mode NEXTENDO)
+#  Genere par l'app homebrew Nextendo. Derniere ligne qui matche gagne.
+# ============================================================
+
+# --- 1) Tout Nintendo -> serveurs Nextendo ---
+51.178.29.194    *.nintendo.com
+51.178.29.194    *.nintendo.co.jp
+51.178.29.194 accounts.nintendo.com
+51.178.29.194 api.accounts.nintendo.com
+51.178.29.194 m-lp1.baas.nintendo.com
+51.178.29.194 e0d67c509fb203858ebcb2fe3f88c2aa.baas.nintendo.com
+51.178.29.194 cdn-image-e0d67c509fb203858ebcb2fe3f88c2aa.baas.nintendo.com
+51.178.29.194 capi.lp1.op2.nintendo.net
+51.178.29.194 storage.hac.lp1.scsi.srv.nintendo.net
+51.178.29.194 val.hac.penne.srv.nintendo.net
+51.178.29.194 god.hac.lp1.penne.srv.nintendo.net
+51.178.29.194 dauth-lp1.ndas.srv.nintendo.net
+51.178.29.194 aauth.hac.lp1.ndas.srv.nintendo.net
+51.178.29.194    *.srv.nintendo.net
+51.178.29.194    *srv.nintendo.net
+51.178.29.194 g2*.s.n.srv.nintendo.net
+164.132.111.120 g2b309e01-lp1.s.n.srv.nintendo.net
+51.178.29.194 g23380901-lp1.s.n.srv.nintendo.net
+51.178.29.194 g2ee2e300-lp1.s.n.srv.nintendo.net
+51.178.29.194 g26cfaf00-lp1.s.n.srv.nintendo.net
+51.178.29.194 g20de2100-lp1.s.n.srv.nintendo.net
+51.178.29.194 t-dce9377b-lp1.lp1.t.npln.srv.nintendo.net
+51.178.29.194 t-adf89f68-lp1.lp1.t.npln.srv.nintendo.net
+51.178.29.194 gw.hac.lp1.vermillion.srv.nintendo.net
+51.178.29.194 val.hac.lp1.penne.srv.nintendo.net
+51.178.29.194 fro-3.hac.lp1.penne.srv.nintendo.net
+51.178.29.194 dragons.hac.lp1.dragons.nintendo.net
+51.178.29.194    *.npln.nintendo.net
+51.178.29.194 gamesync.npln.nintendo.net
+
+# --- 2) NAT-check #2 : IP differente de nncs1 (sinon MK8 test-103) ---
+164.132.111.120  nncs2-*.n.n.srv.nintendo.net
+
+# --- 3) ANTI-BAN : telemetrie -> trou noir ---
+0.0.0.0          receive-%.dg.srv.nintendo.net
+0.0.0.0          receive-%.er.srv.nintendo.net
+
+# --- 4) d4c (MAJ systeme) -> NON REDIRIGE ---
+# NE PAS null-router : nim stocke un flag persistant.
+
+
+# --- 5) conntest (browser connectivity check) -> serveur conntest Nextendo ---
+# Le vrai Nintendo bloque parfois le conntest → "This feature is not available".
+# On le redirige vers notre serveur qui repond X-Organization: Nintendo + 200 OK.
+51.178.29.194 conntest.nintendowifi.net
+51.178.29.194 ctest.cdn.nintendo.net
