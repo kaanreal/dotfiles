@@ -1,0 +1,9 @@
+{
+  "enabled": true,
+  "renderF5": false,
+  "refreshRateScaling": true,
+  "depthBlur": false,
+  "motionBlurStrength": 1.5,
+  "blurAlgorithm": "CENTERED",
+  "toggleKey": "key.keyboard.b"
+}

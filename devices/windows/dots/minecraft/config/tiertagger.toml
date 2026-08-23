@@ -1,0 +1,20 @@
+enabled = true
+gameMode = "manhunt"
+showRetired = true
+highestMode = "ALWAYS"
+showIcons = true
+playerList = true
+retiredColor = -6105345
+apiUrl = "https://mctiers.com/api"
+
+[tierColors]
+HT1 = -1525190
+HT3 = -483494
+HT2 = -3877913
+LT1 = -2772139
+HT5 = -7372120
+HT4 = -8293222
+LT3 = -3769534
+LT2 = -6248526
+LT5 = -10134663
+LT4 = -10134663

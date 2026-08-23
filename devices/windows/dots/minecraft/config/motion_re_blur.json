@@ -1,0 +1,7 @@
+{
+  "enabled": true,
+  "strength": 0.56,
+  "useRRC": true,
+  "quality": 0,
+  "handDepthThreshold": 1.0
+}
