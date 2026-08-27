@@ -1,0 +1,121 @@
+{
+  "configVersion": 2,
+  "recordingControls": {
+    "controlsLocation": "RIGHT",
+    "automaticallyStart": false,
+    "automaticallyFinish": true,
+    "showRecordingToasts": true,
+    "quicksave": false
+  },
+  "recording": {
+    "markDimensionChanges": true,
+    "recordHotbar": false,
+    "localPlayerUpdatesPerSecond": 20,
+    "recordVoiceChat": false,
+    "recordBobbyIntoReplay": false
+  },
+  "exporting": {
+    "defaultExportFilename": "%date%T%time%",
+    "exportRenderDummyFrames": 0
+  },
+  "keyframes": {
+    "defaultInterpolationType": "SMOOTH",
+    "useRealtimeInterpolation": true
+  },
+  "editorMovement": {
+    "flightDirection": "HORIZONTAL",
+    "flightMomentum": 1.0,
+    "flightLockX": false,
+    "flightLockY": false,
+    "flightLockZ": false,
+    "flightLockYaw": false,
+    "flightLockPitch": false
+  },
+  "marker": {
+    "markerOptions1": {
+      "color": "RED",
+      "customRGB": "#FF0000",
+      "savePosition": true,
+      "description": ""
+    },
+    "markerOptions2": {
+      "color": "RED",
+      "customRGB": "#FF0000",
+      "savePosition": true,
+      "description": ""
+    },
+    "markerOptions3": {
+      "color": "RED",
+      "customRGB": "#FF0000",
+      "savePosition": true,
+      "description": ""
+    },
+    "markerOptions4": {
+      "color": "RED",
+      "customRGB": "#FF0000",
+      "savePosition": true,
+      "description": ""
+    }
+  },
+  "advanced": {
+    "disableIncreasedFirstPersonUpdates": false,
+    "disableThirdPersonCancel": false,
+    "synchronizeTicking": false
+  },
+  "internal": {
+    "recentReplays": [
+      "C:\\Users\\Kaan\\AppData\\Roaming\\ModrinthApp\\profiles\\Main - 1.21.11\\flashback\\replays\\2026-05-05T13_48_35.zip",
+      "C:\\Users\\Kaan\\AppData\\Roaming\\ModrinthApp\\profiles\\Pvp 1.21.1\\flashback\\replays\\2026-05-02T20_55_28.zip",
+      "C:\\Users\\Kaan\\AppData\\Roaming\\ModrinthApp\\profiles\\Pvp 1.21.1\\flashback\\replays\\2026-04-27T18_16_21.zip",
+      "C:\\Users\\Kaan\\AppData\\Roaming\\ModrinthApp\\profiles\\Pvp 1.21.1\\flashback\\replays\\2026-04-26T18_15_05.zip",
+      "C:\\Users\\Kaan\\AppData\\Roaming\\ModrinthApp\\profiles\\Pvp 1.21.1\\flashback\\replays\\2026-04-26T18_04_01.zip",
+      "C:\\Users\\Kaan\\AppData\\Roaming\\ModrinthApp\\profiles\\Pvp 1.21.1\\flashback\\replays\\2026-04-26T18_02_46.zip",
+      "C:\\Users\\Kaan\\AppData\\Roaming\\ModrinthApp\\profiles\\Pvp 1.21.1\\flashback\\replays\\2026-04-26T17_52_28.zip",
+      "C:\\Users\\Kaan\\AppData\\Roaming\\ModrinthApp\\profiles\\Pvp 1.21.1\\flashback\\replays\\2026-04-26T17_47_01.zip",
+      "C:\\Users\\Kaan\\AppData\\Roaming\\ModrinthApp\\profiles\\Pvp 1.21.1\\flashback\\replays\\2026-04-24T21_16_38.zip",
+      "C:\\Users\\Kaan\\AppData\\Roaming\\ModrinthApp\\profiles\\Pvp 1.21.1\\flashback\\replays\\2026-04-23T21_17_50.zip",
+      "C:\\Users\\Kaan\\AppData\\Roaming\\ModrinthApp\\profiles\\Pvp 1.21.1\\flashback\\replays\\2026-04-19T23_38_56.zip",
+      "C:\\Users\\Kaan\\AppData\\Roaming\\ModrinthApp\\profiles\\Pvp 1.21.1\\flashback\\replays\\2026-04-19T17_49_59.zip",
+      "C:\\Users\\Kaan\\AppData\\Roaming\\ModrinthApp\\profiles\\Pvp 1.21.1\\flashback\\replays\\2026-04-17T23_55_48.zip",
+      "C:\\Users\\Kaan\\AppData\\Roaming\\ModrinthApp\\profiles\\Pvp 1.21.1\\flashback\\replays\\2026-04-08T01_46_19.zip",
+      "C:\\Users\\Kaan\\AppData\\Roaming\\ModrinthApp\\profiles\\Pvp 1.21.1\\flashback\\replays\\2026-04-08T00_20_27.zip",
+      "C:\\Users\\Kaan\\AppData\\Roaming\\ModrinthApp\\profiles\\Pvp 1.21.1\\flashback\\replays\\2026-04-05T17_26_53.zip",
+      "C:\\Users\\Kaan\\AppData\\Roaming\\ModrinthApp\\profiles\\Pvp 1.21.1\\flashback\\replays\\2026-04-04T02_28_46.zip"
+    ],
+    "openedWindows": [],
+    "nextUnsupportedModLoaderWarning": 0,
+    "filterUnnecessaryPackets": true,
+    "signedRenderFilter": true,
+    "viewedTipsOfTheDay": 1023,
+    "showTipOfTheDay": false,
+    "nextTipOfTheDay": 1775349122364,
+    "replaySorting": "CREATED_DATE",
+    "sortDescending": true,
+    "defaultOverrideFov": 70.0,
+    "enableOverrideFovByDefault": false
+  },
+  "internalExport": {
+    "resolution": [
+      1920,
+      1080
+    ],
+    "framerate": [
+      60.0
+    ],
+    "resetRng": false,
+    "ssaa": false,
+    "noGui": false,
+    "container": "MP4",
+    "videoCodec": "H264",
+    "selectedVideoEncoder": [
+      0
+    ],
+    "useMaximumBitrate": false,
+    "recordAudio": true,
+    "transparentBackground": false,
+    "audioCodec": "AAC",
+    "stereoAudio": false,
+    "defaultExportPath": "C:\\Users\\Kaan\\Desktop"
+  },
+  "forceDefaultExportSettings": {}
+}

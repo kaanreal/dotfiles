@@ -1,0 +1,9 @@
+{
+  "uncap_menu_frame_rate": true,
+  "ignore_initial_click": "in_world",
+  "states": {
+    "hovered": {
+      "frame_rate_target": -1
+    }
+  }
+}
