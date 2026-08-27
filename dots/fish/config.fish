@@ -43,11 +43,19 @@ if status is-interactive
         echo -en "\e]133;A\e\\"
     end
 
+    # nix: allow unfree flakes without --impure every time
+    abbr npa 'nix profile add --impure'
+
     # Custom fish config
     set -q XDG_CONFIG_HOME && set -l cConf $XDG_CONFIG_HOME/caelestia || set -l cConf $HOME/.config/caelestia
     source $cConf/user-config.fish 2> /dev/null
 end
 
+# Allow unfree nix packages (flakes ignore ~/.config/nixpkgs/config.nix)
+set -gx NIXPKGS_ALLOW_UNFREE 1
+
 # terminal-wakatime setup
-set -x PATH "$HOME/.wakatime" $PATH
-terminal-wakatime init fish | source
+if test -d "$HOME/.wakatime"
+    set -x PATH "$HOME/.wakatime" $PATH
+    command -v terminal-wakatime &> /dev/null && terminal-wakatime init fish | source
+end
