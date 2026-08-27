@@ -1,3 +1,10 @@
+    # macOS / Homebrew paths
+    fish_add_path /opt/homebrew/bin
+    fish_add_path /opt/homebrew/sbin
+    fish_add_path ~/.local/bin
+    fish_add_path ~/.bun/bin
+    fish_add_path ~/.cargo/bin
+
 if status is-interactive
     # Starship custom prompt
     command -v starship &> /dev/null && starship init fish | source
