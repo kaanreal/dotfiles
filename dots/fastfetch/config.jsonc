@@ -41,7 +41,7 @@
       "key": "  │ ",
       "keyColor": "#C4A882",
       "keyWidth": 10,
-      "text": "echo 󰏗 Gen $(readlink /nix/var/nix/profiles/system | grep -o '[0-9]\\+')",
+      "text": "test -e /nix/var/nix/profiles/system && echo 󰏗 Gen $(readlink /nix/var/nix/profiles/system | grep -o '[0-9]\\+')",
     },
     {
       "type": "shell",
@@ -108,21 +108,34 @@
 
     {
       "type": "host",
-      "format": "{5} {1} {2}",
+      "format": "MacBook Pro M4",
       "key": "  󰍹 PC",
       "keyColor": "#D4C4A8",
       "keyWidth": 10,
+      "condition": {
+        "system": "macOS",
+      },
+    },
+    {
+      "type": "host",
+      "format": "{name:-32}",
+      "key": "  󰍹 PC",
+      "keyColor": "#D4C4A8",
+      "keyWidth": 10,
+      "condition": {
+        "!system": "macOS",
+      },
     },
     {
       "type": "cpu",
-      "format": "{1} @ {3} GHz",
+      "format": "{name} @ {freq-max}",
       "key": "  ├ ",
       "keyColor": "#C4A882",
       "keyWidth": 10,
     },
     {
       "type": "gpu",
-      "format": "{1} {2}",
+      "format": "{name}",
       "key": "  ├ ",
       "keyColor": "#B5956A",
       "keyWidth": 10,
@@ -138,16 +151,34 @@
       "key": "  ├ ",
       "keyColor": "#9D7050",
       "keyWidth": 10,
+      "condition": {
+        "!system": "macOS",
+      },
     },
     {
       "type": "disk",
+      "format": "{size-used} / {size-total} ({size-percentage})",
       "key": "  ├ ",
       "keyColor": "#8C5E42",
       "keyWidth": 10,
+      "condition": {
+        "!system": "macOS",
+      },
+    },
+    {
+      "type": "disk",
+      "folders": "/",
+      "format": "{size-used} / {size-total} ({size-percentage})",
+      "key": "  ├ ",
+      "keyColor": "#8C5E42",
+      "keyWidth": 10,
+      "condition": {
+        "system": "macOS",
+      },
     },
     {
       "type": "monitor",
-      "format": "{2}x{3} @ {6}\" {11}Hz",
+      "format": "{width}x{height} @ {inch}\" {refresh-rate}Hz",
       "key": "  └ ",
       "keyColor": "#7C4D38",
       "keyWidth": 10,
