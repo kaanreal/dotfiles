@@ -58,6 +58,12 @@ working tree and stops for manual resolution if a merge conflicts.
 | Free old generations     | `cleanup` (fish) → `nh clean all` |
 | Backup the repo          | `scripts/backup.sh`               |
 
+On Arch, install `caelestia-shell` from the AUR, then run
+`scripts/link-linux-dots.sh` once. It backs up existing config
+directories under `~/.local/state/dotfiles-backups/` and creates the same
+`~/dotfiles/dots` links that Home Manager uses on NixOS. The shared `update`
+and `cleanup` fish commands select the correct implementation for each OS.
+
 `save` stages the whole repository, creates a timestamped snapshot commit, and
 pushes it to `origin`. It exits without committing when nothing changed.
 Commit subjects use a random cozy emoji

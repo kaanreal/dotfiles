@@ -1,4 +1,4 @@
-# Caelestia user fish config — NixOS-specific additions on top of the shared
+# Caelestia user fish config for Linux, on top of the shared
 # fish config in dots/fish. Sourced from ~/.config/caelestia/user-config.fish
 # on every new shell.
 #
@@ -8,32 +8,36 @@
 # User-installed scripts (e.g. osu-wine from osu-winello).
 set -gx PATH $HOME/.local/bin $PATH
 
-# nh >= 4.4 dropped current-directory flake detection; bare `nh os switch`
-# now only falls back to /etc/nixos. Point it at this repo so update/rebuild
-# work from any directory.
-set -gx NH_OS_FLAKE $HOME/dotfiles
+if test -e /etc/NIXOS
+    # nh >= 4.4 no longer detects the flake from the current directory.
+    set -gx NH_OS_FLAKE $HOME/dotfiles
 
-# Apply the system config (system + home) from this repo. Only for Nix
-# packages, services, drivers, modules, or system configuration. Dotfile
-# edits are already live (out-of-store links into ~/dotfiles/dots).
-function rebuild
-    set -l repo $HOME/dotfiles
-    nh os switch "path:$repo"
-end
+    function rebuild
+        nh os switch "path:$HOME/dotfiles"
+    end
 
-# Update Nix inputs (nixpkgs, home-manager, caelestia-shell, kernel) and
-# rebuild. Does not touch the dots.
-function update
-    set -l repo $HOME/dotfiles
+    function update
+        nix flake update --flake $HOME/dotfiles
+        or return 1
+        nh os switch "path:$HOME/dotfiles"
+    end
 
-    nix flake update --flake $repo
-    or return 1
+    function cleanup
+        nh clean all
+        echo "cleaned up old generations"
+    end
+else if test -e /etc/arch-release
+    function update
+        if command -q yay
+            yay -Syu
+        else
+            sudo pacman -Syu
+        end
+    end
 
-    nh os switch "path:$repo"
-end
-
-# Free disk space: old generations + garbage (keeps the last week).
-function cleanup
-    nh clean all
-    echo "cleaned up old generations"
+    function cleanup
+        set -l orphans (pacman -Qtdq)
+        test -z "$orphans"; or sudo pacman -Rns $orphans
+        sudo paccache -rk2
+    end
 end
