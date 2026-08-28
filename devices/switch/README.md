@@ -10,6 +10,10 @@ It intentionally does not include games, firmware, NAND or PRODINFO backups,
 console keys, certificates, tokens, saves, screenshots, cheats, logs, caches,
 homebrew binaries, payloads, installed themes, or emulator data.
 
+`devices/switch/themes/` is a separate archive of personal theme packages and
+generated patches. It is not part of the `sd/` configuration snapshot and the
+sync script does not copy it to or from the card.
+
 Refresh the snapshot while the SD card is mounted:
 
 ```sh

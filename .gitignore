@@ -14,3 +14,6 @@ result-*
 # fish universal-variable store written through the ~/.config/fish symlink
 dots/fish/fish_variables
 devices/macos/dots/fish/fish_variables
+
+# runtime state written through live config symlinks
+dots/micro/bindings.json

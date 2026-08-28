@@ -17,8 +17,7 @@ if test -e /etc/NIXOS
     end
 
     function update
-        nix flake update --flake $HOME/dotfiles
-        or return 1
+        echo "flake inputs are pinned in flake.lock; rebuilding those exact revisions"
         nh os switch "path:$HOME/dotfiles"
     end
 
@@ -37,7 +36,10 @@ else if test -e /etc/arch-release
 
     function cleanup
         set -l orphans (pacman -Qtdq)
-        test -z "$orphans"; or sudo pacman -Rns $orphans
+        if test -n "$orphans"
+            echo "orphan candidates (review before removing):"
+            printf '  %s\n' $orphans
+        end
         sudo paccache -rk2
     end
 end

@@ -15,14 +15,14 @@ OUT="$DEST/dotfiles-$STAMP.tar.gz"
 mkdir -p "$DEST"
 tar czf "$OUT" -C "$(dirname "$REPO")" "$(basename "$REPO")"
 
-# Prune old backups without relying on GNU-specific `xargs -r`.
-count=0
-while IFS= read -r backup; do
-  count=$((count + 1))
-  if (( count > 5 )); then
-    rm -f -- "$backup"
-  fi
-done < <(find "$DEST" -maxdepth 1 -type f -name 'dotfiles-*.tar.gz' -print | sort -r)
+# Bash globbing works on both GNU/Linux and macOS. The timestamped names sort
+# oldest first, so prune from the front until five snapshots remain.
+shopt -s nullglob
+backups=("$DEST"/dotfiles-*.tar.gz)
+while (( ${#backups[@]} > 5 )); do
+  rm -f -- "${backups[0]}"
+  backups=("${backups[@]:1}")
+done
 
 echo "backed up to $OUT"
-ls -1t "$DEST"/dotfiles-*.tar.gz 2>/dev/null
+printf '%s\n' "${backups[@]}"

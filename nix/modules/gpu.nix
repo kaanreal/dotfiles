@@ -20,20 +20,27 @@
   # Reset anytime with `nvidia-smi -rgc` and `nvidia-smi -rmc`.
   systemd.services.nvidia-clocks = {
     description = "Lock NVIDIA graphics clock for stable frame pacing";
-    after = [ "display-manager.service" ];
-    wantedBy = [ "graphical.target" ];
+    after = [ "systemd-modules-load.service" ];
+    wantedBy = [ "multi-user.target" ];
     serviceConfig = {
       Type = "oneshot";
       RemainAfterExit = true;
+      Restart = "on-failure";
+      RestartSec = 2;
     };
     script = ''
+      ${config.hardware.nvidia.package.bin}/bin/nvidia-modprobe
+      ${config.hardware.nvidia.package.bin}/bin/nvidia-modprobe -c0 -u
       ${config.hardware.nvidia.package.bin}/bin/nvidia-smi -pm 1
+      locked=0
       for i in 1 2 3 4 5; do
         ${config.hardware.nvidia.package.bin}/bin/nvidia-smi -lgc 1552,1552 \
           && ${config.hardware.nvidia.package.bin}/bin/nvidia-smi -lmc 7001,7001 \
+          && locked=1 \
           && break
         sleep 2
       done
+      test "$locked" -eq 1
       ${config.hardware.nvidia.package.bin}/bin/nvidia-smi \
         --query-gpu=clocks.gr,clocks.mem \
         --format=csv,noheader

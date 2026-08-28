@@ -1,0 +1,18 @@
+[filter "lfs"]
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f
+	process = git-lfs filter-process
+	required = true
+
+[user]
+	name = kaanreal
+	email = 167336594+kaanreal@users.noreply.github.com
+
+[credential]
+	helper = manager
+
+[core]
+	excludesfile = ~/.gitignore_global
+
+[init]
+	defaultBranch = main

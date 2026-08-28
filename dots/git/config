@@ -8,8 +8,5 @@
 	name = kaanreal
 	email = 167336594+kaanreal@users.noreply.github.com
 
-[credential]
-	helper = osxkeychain
-
 [core]
 	excludesfile = ~/.gitignore_global

@@ -5,8 +5,8 @@
 	required = true
 
 [user]
-	name = Kaan
-	email = kaan.cat@icloud.com
+	name = kaanreal
+	email = 167336594+kaanreal@users.noreply.github.com
 
 [credential]
 	helper = osxkeychain

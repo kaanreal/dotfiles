@@ -5,6 +5,12 @@ set -euo pipefail
 sd="${1:-/Volumes/SWITCH SD}"
 repo_root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 target="$repo_root/devices/switch/sd"
+staging="$(mktemp -d "$repo_root/devices/switch/.sd-snapshot.XXXXXX")"
+
+cleanup() {
+  [[ -n "${staging:-}" && -d "$staging" ]] && /bin/rm -rf "$staging"
+}
+trap cleanup EXIT
 
 if [[ ! -d "$sd/atmosphere" || ! -d "$sd/bootloader" ]]; then
   printf 'not a Switch CFW SD: %s\n' "$sd" >&2
@@ -47,13 +53,10 @@ files=(
   emuiibo/overlay/favorites.txt
 )
 
-/bin/rm -rf "$target"
-/bin/mkdir -p "$target"
-
 copy_one() {
   local relative="$1"
   local source="$sd/$relative"
-  local destination="$target/$relative"
+  local destination="$staging/$relative"
 
   [[ -f "$source" ]] || return 0
   /bin/mkdir -p "$(dirname "$destination")"
@@ -73,20 +76,24 @@ done < <(
     -print0
 )
 
-/usr/bin/find "$target" -type f \
+/usr/bin/find "$staging" -type f \
   \( -name '*.ini' -o -name '*.cfg' -o -name '*.json' -o -name '*.txt' -o -name '*.flag' -o -name '*.lst' \) \
   -exec /usr/bin/env LC_ALL=C LANG=C /usr/bin/perl -0777 -pi -e 's/\r\n/\n/g; s/[ \t]+$//mg; s/\n+\z/\n/' {} +
 
-if /usr/bin/find "$target" -type f \
+if /usr/bin/find "$staging" -type f \
   \( -iname '*key*' -o -iname '*prodinfo*' -o -iname '*bis*' -o -iname '*cert*' -o -iname '*token*' -o -iname '*password*' -o -iname '*secret*' \) \
   -print -quit | /usr/bin/grep -q .; then
   printf 'refusing snapshot: a sensitive filename passed the allowlist\n' >&2
   exit 1
 fi
 
-if /usr/bin/grep -RIEq 'BEGIN [A-Z ]*PRIVATE KEY|api_key[[:space:]]*=[[:space:]]*[^[:space:]]+|pass(word)?[[:space:]]*=[[:space:]]*[^[:space:]]+' "$target"; then
+if /usr/bin/grep -RIEq 'BEGIN [A-Z ]*PRIVATE KEY|api[_-]?key["[:space:]]*[:=]["[:space:]]*[^"[:space:]}]+|pass(word)?["[:space:]]*[:=]["[:space:]]*[^"[:space:]}]+' "$staging"; then
   printf 'refusing snapshot: possible credential found\n' >&2
   exit 1
 fi
+
+/bin/rm -rf "$target"
+/bin/mv "$staging" "$target"
+staging=
 
 printf 'updated %s\n' "$target"

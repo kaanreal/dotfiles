@@ -118,11 +118,17 @@ in
         entry: Windows Boot Manager
   '';
   boot.loader.limine.extraEntries = ''
-    /Arch Linux
+    /Arch
         protocol: linux
-        path: fslabel(archroot):/boot/vmlinuz-linux
-        module_path: fslabel(archroot):/boot/initramfs-linux.img
-        cmdline: root=LABEL=archroot rw
+        path: boot():/arch/vmlinuz-linux-cachyos
+        module_path: boot():/arch/initramfs-linux-cachyos.img
+        cmdline: root=UUID=ddedd945-3579-4958-8a4e-f47619d88f6a resume=UUID=5c55d484-275c-4895-9fde-da7ffe0d1398 rw quiet splash loglevel=3 nvidia-drm.modeset=1 nvidia-drm.fbdev=1
+
+    /Arch (stock)
+        protocol: linux
+        path: boot():/arch/vmlinuz-linux
+        module_path: boot():/arch/initramfs-linux.img
+        cmdline: root=UUID=ddedd945-3579-4958-8a4e-f47619d88f6a resume=UUID=5c55d484-275c-4895-9fde-da7ffe0d1398 rw quiet splash loglevel=3 nvidia-drm.modeset=1 nvidia-drm.fbdev=1
   '';
 
   # Give the kernel console (and therefore the TTY-based Ly greeter) the same

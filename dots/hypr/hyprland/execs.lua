@@ -5,14 +5,14 @@ hl.on("hyprland.start", function()
     -- This custom Hyprland session is not launched by a desktop-session unit,
     -- so its graphical services are not pulled in automatically. Import the
     -- live Wayland environment before starting Sunshine through its user unit.
-    hl.exec_cmd("sh -lc 'systemctl --user import-environment WAYLAND_DISPLAY XDG_CURRENT_DESKTOP XDG_SESSION_TYPE HYPRLAND_INSTANCE_SIGNATURE && systemctl --user start sunshine.service'")
+    hl.exec_cmd("sh -lc 'systemctl --user import-environment WAYLAND_DISPLAY XDG_CURRENT_DESKTOP XDG_SESSION_TYPE HYPRLAND_INSTANCE_SIGNATURE; systemctl --user cat sunshine.service >/dev/null 2>&1 && systemctl --user start sunshine.service || true'")
 
     -- Start the shell first so a failure later in this chain cannot prevent it.
     hl.exec_cmd("qs -c caelestia -n -d")
 
     -- Keyring and auth
     hl.exec_cmd("gnome-keyring-daemon --start --components=secrets")
-    hl.exec_cmd("polkit-gnome-authentication-agent-1")
+    hl.exec_cmd("sh -lc 'if command -v polkit-gnome-authentication-agent-1 >/dev/null 2>&1; then exec polkit-gnome-authentication-agent-1; elif [ -x /usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1 ]; then exec /usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1; fi'")
 
     -- Clipboard history
     hl.exec_cmd("wl-paste --type text --watch cliphist store")
@@ -27,7 +27,7 @@ hl.on("hyprland.start", function()
     hl.exec_cmd("gsettings set org.gnome.desktop.interface cursor-size " .. vars.cursorSize)
 
     -- Match the NVIDIA Control Panel's maximum digital-vibrance setting.
-    hl.exec_cmd("uvx nvibrant 1023 1023")
+    hl.exec_cmd("uvx --from nvibrant==1.2.1 nvibrant 1023 1023")
 end)
 
 -- Resizer listeners

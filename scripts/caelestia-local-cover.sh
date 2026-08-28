@@ -16,6 +16,7 @@ normalise() {
 
 wanted_artist=$(normalise "$artist")
 wanted_title=$(normalise "$title")
+[[ -n "$wanted_title" ]] || exit 0
 key=$(printf '%s\0%s' "$wanted_artist" "$wanted_title" | sha256sum | cut -d' ' -f1)
 cover="$cache_dir/$key.jpg"
 
@@ -48,4 +49,3 @@ while IFS= read -r -d '' file; do
   fi
   rm -f "$tmp"
 done < <(find "$music_dir" -type f \( -iname '*.mp3' -o -iname '*.m4a' -o -iname '*.flac' -o -iname '*.ogg' \) -print0)
-

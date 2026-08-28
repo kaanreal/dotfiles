@@ -1,0 +1,20 @@
+[Unit]
+Description=Lock NVIDIA graphics clock for stable frame pacing
+After=systemd-modules-load.service
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+ExecStartPre=/usr/bin/nvidia-modprobe
+ExecStartPre=/usr/bin/nvidia-modprobe -c0 -u
+ExecStart=/usr/bin/nvidia-smi -pm 1
+ExecStart=/usr/bin/nvidia-smi -lgc 1552,1552
+ExecStart=/usr/bin/nvidia-smi -lmc 7001,7001
+ExecStart=/usr/bin/nvidia-smi --query-gpu=pstate,persistence_mode,clocks.gr,clocks.mem --format=csv,noheader
+ExecStop=/usr/bin/nvidia-smi -rgc
+ExecStop=/usr/bin/nvidia-smi -rmc
+Restart=on-failure
+RestartSec=2s
+
+[Install]
+WantedBy=multi-user.target

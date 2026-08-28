@@ -11,7 +11,7 @@ STAMP="$(date +%Y%m%d-%H%M%S)"
 BACKUP_ROOT="$HOME/.local/state/dotfiles-backups/$STAMP"
 BACKED_UP=0
 
-links=(
+directory_links=(
   "hypr:hypr"
   "caelestia:caelestia"
   "fish:fish"
@@ -21,16 +21,17 @@ links=(
   "btop:btop"
   "micro:micro"
   "thunar:Thunar"
-  "starship.toml:starship.toml"
+  "nvim:nvim"
+  "uwsm:uwsm"
 )
 
 mkdir -p "$CONFIG_HOME"
 
-for entry in "${links[@]}"; do
-  source_name="${entry%%:*}"
-  target_name="${entry#*:}"
-  source_path="$DOTS/$source_name"
-  target_path="$CONFIG_HOME/$target_name"
+link_one() {
+  local source_name="$1"
+  local target_name="$2"
+  local source_path="$DOTS/$source_name"
+  local target_path="$CONFIG_HOME/$target_name"
 
   if [[ ! -e "$source_path" ]]; then
     echo "missing repo config: $source_path" >&2
@@ -39,18 +40,42 @@ for entry in "${links[@]}"; do
 
   if [[ -L "$target_path" && "$(readlink -f "$target_path")" == "$(readlink -f "$source_path")" ]]; then
     echo "ok      $target_path"
-    continue
+    return
   fi
 
   if [[ -e "$target_path" || -L "$target_path" ]]; then
-    mkdir -p "$BACKUP_ROOT"
+    mkdir -p "$BACKUP_ROOT/$(dirname "$target_name")"
     mv "$target_path" "$BACKUP_ROOT/$target_name"
     BACKED_UP=1
     echo "backup  $target_path"
   fi
 
+  mkdir -p "$(dirname "$target_path")"
   ln -s "$source_path" "$target_path"
   echo "link    $target_path -> $source_path"
+}
+
+for entry in "${directory_links[@]}"; do
+  source_name="${entry%%:*}"
+  target_name="${entry#*:}"
+  link_one "$source_name" "$target_name"
+done
+
+file_links=(
+  "starship.toml:starship.toml"
+  "vscode/settings.json:Code/User/settings.json"
+  "vscode/keybindings.json:Code/User/keybindings.json"
+  "vscode/flags.conf:code-flags.conf"
+  "zed/settings.json:zed/settings.json"
+  "zed/keymap.json:zed/keymap.json"
+  "opencode/opencode.jsonc:opencode/opencode.jsonc"
+  "spicetify/Themes/caelestia/user.css:spicetify/Themes/caelestia/user.css"
+)
+
+for entry in "${file_links[@]}"; do
+  source_name="${entry%%:*}"
+  target_name="${entry#*:}"
+  link_one "$source_name" "$target_name"
 done
 
 # Arch's caelestia-shell package exposes its Quickshell config through

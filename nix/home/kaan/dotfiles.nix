@@ -66,5 +66,50 @@ in
       source = link "${dotfiles}/starship.toml";
       force = true;
     };
+
+    "nvim" = {
+      source = link "${dotfiles}/nvim";
+      force = true;
+    };
+
+    "Code/User/settings.json" = {
+      source = link "${dotfiles}/vscode/settings.json";
+      force = true;
+    };
+
+    "Code/User/keybindings.json" = {
+      source = link "${dotfiles}/vscode/keybindings.json";
+      force = true;
+    };
+
+    "code-flags.conf" = {
+      source = link "${dotfiles}/vscode/flags.conf";
+      force = true;
+    };
+
+    "zed/settings.json" = {
+      source = link "${dotfiles}/zed/settings.json";
+      force = true;
+    };
+
+    "zed/keymap.json" = {
+      source = link "${dotfiles}/zed/keymap.json";
+      force = true;
+    };
+
+    "opencode/opencode.jsonc" = {
+      source = link "${dotfiles}/opencode/opencode.jsonc";
+      force = true;
+    };
+
+    "uwsm" = {
+      source = link "${dotfiles}/uwsm";
+      force = true;
+    };
+
+    "spicetify/Themes/caelestia/user.css" = {
+      source = link "${dotfiles}/spicetify/Themes/caelestia/user.css";
+      force = true;
+    };
   };
 }

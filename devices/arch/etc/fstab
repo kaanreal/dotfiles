@@ -1,0 +1,7 @@
+# <file system>                             <mount point>  <type>  <options>                                      <dump> <pass>
+UUID=D147-B3BE                              /efi           vfat    defaults,umask=0077                            0      2
+UUID=f98d008c-c950-4b12-b851-c93d46992162  /boot          ext4    defaults,noatime,nodiscard                     0      2
+UUID=ddedd945-3579-4958-8a4e-f47619d88f6a  /              ext4    defaults,noatime,nodiscard                     0      1
+UUID=5c55d484-275c-4895-9fde-da7ffe0d1398  none           swap    defaults                                      0      0
+tmpfs                                       /tmp           tmpfs   defaults,noatime,mode=1777                     0      0
+UUID=34D6E186D6E148A6                       /mnt/windows   ntfs-3g nofail,rw,uid=1000,gid=100,umask=022,x-gvfs-show 0     0

@@ -1,0 +1,14 @@
+[Trigger]
+Operation = Install
+Operation = Upgrade
+Type = Package
+Target = linux
+Target = linux-cachyos
+Target = nvidia-open
+Target = linux-cachyos-nvidia-open
+Target = mkinitcpio
+
+[Action]
+Description = Copy updated Arch kernels to the Limine ESP
+When = PostTransaction
+Exec = /usr/local/sbin/sync-arch-kernels

@@ -1,0 +1,64 @@
+{
+    "editor.renderWhitespace": "trailing",
+    "editor.multiCursorModifier": "ctrlCmd",
+    "editor.cursorSmoothCaretAnimation": "on",
+    "editor.fontLigatures": true,
+    "editor.minimap.autohide": "mouseover",
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.formatOnSave": true,
+    "editor.smoothScrolling": true,
+    "editor.suggestSelection": "recentlyUsedByPrefix",
+    "editor.inlayHints.enabled": "off",
+    "editor.codeActionsOnSave": {
+        "source.organizeImports": "explicit"
+    },
+    "prettier.tabWidth": 4,
+    "prettier.printWidth": 120,
+    "prettier.arrowParens": "avoid",
+    "diffEditor.hideUnchangedRegions.enabled": true,
+    "diffEditor.codeLens": true,
+    "workbench.list.smoothScrolling": true,
+    "workbench.iconTheme": "symbols",
+    "workbench.productIconTheme": "bongocat",
+    "workbench.colorTheme": "ClawBeige Dark",
+    "terminal.integrated.smoothScrolling": true,
+    "terminal.integrated.enableMultiLinePasteWarning": "never",
+    "javascript.preferences.importModuleSpecifierEnding": "minimal",
+    "typescript.preferences.importModuleSpecifierEnding": "minimal",
+    "typescript.preferences.preferTypeOnlyAutoImports": true,
+    "python.languageServer": "Pylance",
+    "ruff.lineLength": 120,
+    "[python]": {
+        "editor.defaultFormatter": "charliermarsh.ruff"
+    },
+    "[c]": {
+        "editor.defaultFormatter": "llvm-vs-code-extensions.vscode-clangd"
+    },
+    "[cpp]": {
+        "editor.defaultFormatter": "llvm-vs-code-extensions.vscode-clangd"
+    },
+    "git.enableSmartCommit": true,
+    "git.ignoreMissingGitWarning": true,
+    "git.openRepositoryInParentFolders": "never",
+    "github.copilot.nextEditSuggestions.enabled": true,
+    "explorer.confirmDelete": false,
+    "files.autoSave": "onFocusChange",
+    "security.workspace.trust.startupPrompt": "always",
+    "security.workspace.trust.untrustedFiles": "open",
+    "window.titleBarStyle": "custom",
+    "animations.Enabled": true,
+    "animations.CursorAnimation": true,
+    "animations.Scrolling": "Slide",
+    "animations.UseCursorColorForCursorAnimation": true,
+    "animations.Install-Method": "Custom UI Style",
+    "custom-ui-style.external.imports": [
+        "file:///c:/Users/Kaan/.vscode/extensions/brandonkirbyson.vscode-animations-2.0.7/dist/updateHandler.js"
+    ],
+    "vscode_vibrancy.enableAutoTheme": true,
+    "vscode_vibrancy.forceFramelessWindow": false,
+    "vscode_vibrancy.type": "acrylic",
+    "vscord.app.name": "Visual Studio Code",
+    "vscord.status.problems.enabled": false,
+    "vscord.behaviour.suppressNotifications": true,
+    "vscord.behaviour.suppressRpcCouldNotConnect": true
+}
