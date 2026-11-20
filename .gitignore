@@ -17,3 +17,7 @@ devices/macos/dots/fish/fish_variables
 
 # runtime state written through live config symlinks
 dots/micro/bindings.json
+
+# caches and backups the mods write, not worth snapshotting
+devices/windows/dots/minecraft/**/blob_cache/
+devices/windows/dots/minecraft/**/*.backup
