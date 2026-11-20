@@ -10,7 +10,7 @@
     "editor.suggestSelection": "recentlyUsedByPrefix",
     "editor.inlayHints.enabled": "off",
     "editor.codeActionsOnSave": {
-        "source.organizeImports": "explicit"
+        "source.organizeImports": "explicit",
     },
     "prettier.tabWidth": 4,
     "prettier.printWidth": 120,
@@ -29,13 +29,13 @@
     "python.languageServer": "Pylance",
     "ruff.lineLength": 120,
     "[python]": {
-        "editor.defaultFormatter": "charliermarsh.ruff"
+        "editor.defaultFormatter": "charliermarsh.ruff",
     },
     "[c]": {
-        "editor.defaultFormatter": "llvm-vs-code-extensions.vscode-clangd"
+        "editor.defaultFormatter": "llvm-vs-code-extensions.vscode-clangd",
     },
     "[cpp]": {
-        "editor.defaultFormatter": "llvm-vs-code-extensions.vscode-clangd"
+        "editor.defaultFormatter": "llvm-vs-code-extensions.vscode-clangd",
     },
     "git.enableSmartCommit": true,
     "git.ignoreMissingGitWarning": true,
@@ -52,7 +52,7 @@
     "animations.UseCursorColorForCursorAnimation": true,
     "animations.Install-Method": "Custom UI Style",
     "custom-ui-style.external.imports": [
-        "file:///c:/Users/Kaan/.vscode/extensions/brandonkirbyson.vscode-animations-2.0.7/dist/updateHandler.js"
+        "file:///c:/Users/Kaan/.vscode/extensions/brandonkirbyson.vscode-animations-2.0.7/dist/updateHandler.js",
     ],
     "vscode_vibrancy.enableAutoTheme": true,
     "vscode_vibrancy.forceFramelessWindow": false,
@@ -60,5 +60,6 @@
     "vscord.app.name": "Visual Studio Code",
     "vscord.status.problems.enabled": false,
     "vscord.behaviour.suppressNotifications": true,
-    "vscord.behaviour.suppressRpcCouldNotConnect": true
+    "vscord.behaviour.suppressRpcCouldNotConnect": true,
+    "githubLocalActions.dockerDesktopPath": "C:/Program Files/Docker/Docker/Docker Desktop.exe",
 }
