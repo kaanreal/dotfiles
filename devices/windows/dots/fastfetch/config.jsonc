@@ -15,6 +15,9 @@
   },
 
   "display": {
+    // Under Kitsu's console fastfetch thinks it's writing to a pipe, which drops the
+    // image logo (ASCII Windows logo instead) and every color. It's a real terminal.
+    "pipe": false,
     "separator": "  ",
     "color": {
       "keys": "title",

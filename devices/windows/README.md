@@ -52,7 +52,8 @@ PowerShell 7 set up to feel like fish.
   suggestions, the beige theme, `save` and `dots-update`.
 - `dots/fastfetch/config.jsonc`: the shared layout with Windows things in it
   (Explorer, dark mode and accent, the real GPU, C:, the audio device). The Mori
-  logo uses `kitty-direct`, since `kitten icat` isn't there.
+  logo uses `kitty-direct`. fastfetch takes Kitsu's console for a pipe and then
+  drops the logo and all colors, so the config sets `"pipe": false`.
 - Starship uses the shared `dots/starship.toml` as is.
 
 Kitsu has no `--single-instance` on Windows, so `kitty-hotkey.exe` fakes it,
