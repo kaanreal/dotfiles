@@ -540,23 +540,21 @@ Do not commit broken work just so there is a commit.
 
 ### commit style
 
-Commits should be cute and cozy while still respecting the repository's existing commit format.
+Commits should follow the repository's existing style. When no machine-readable format is required, use a concise human-readable subject with one fitting cozy emoji at the beginning.
 
-The technical structure comes first.
-
-The cute part comes after it.
+Do not impose Conventional Commit prefixes when the repository does not require them. Henkan's `CONTRIBUTING.md` welcomes emoji-first subjects.
 
 If the project uses Conventional Commits or Release Please, keep the parseable portion completely valid.
 
 Good:
 
 ```text
-feat(preview): add autoplay chart preview 🌸
-fix(memory): keep queued writes ordered 🫧
-refactor(i18n): simplify locale loading 🍵
-docs: explain the Home layout 📚
-chore(deps): refresh dependencies 🌱
-fix(export): handle missing backgrounds 🐈
+🌸 add autoplay chart preview
+🫧 keep queued writes ordered
+🍵 simplify locale loading
+📚 explain the Home layout
+🌱 refresh dependencies
+🐈 handle missing backgrounds
 ```
 
 Bad:
@@ -567,7 +565,7 @@ Bad:
 cute update :3
 ```
 
-The emoji belongs at the end so tools such as Release Please can still understand the commit.
+Put the emoji first when no parseable prefix is required. When release tooling requires a machine-readable prefix, keep that prefix valid and put the emoji after it.
 
 Use an emoji that actually fits the change.
 
