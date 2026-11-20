@@ -1,0 +1,159 @@
+{
+  "$schema": "https://github.com/fastfetch-cli/fastfetch/raw/dev/doc/json_schema.json",
+
+  "logo": {
+    "source": "~/dotfiles/dots/fastfetch/Mori-idle.png",
+    "type": "kitty-direct",
+    // only the width: kitty-direct stretches to exactly width x height cells,
+    // with one side given kitty keeps the aspect ratio (like kitty-icat on the Mac)
+    "width": 24,
+    "padding": {
+      "top": 1,
+      "bottom": 0,
+      "left": 2,
+    },
+  },
+
+  "display": {
+    "separator": "  ",
+    "color": {
+      "keys": "title",
+    },
+  },
+
+  "modules": [
+    "break",
+    "break",
+
+    {
+      "type": "os",
+      "key": "   OS",
+      "keyColor": "#D4C4A8",
+      "keyWidth": 10,
+    },
+    {
+      "type": "kernel",
+      "key": "  ├ ",
+      "keyColor": "#CCBA9C",
+      "keyWidth": 10,
+    },
+    {
+      // fixed text: in Kitsu fastfetch runs from kitsu-shell.cmd next to pwsh, so it would say cmd
+      "type": "custom",
+      "format": "PowerShell 7",
+      "key": "  └ ",
+      "keyColor": "#BAA078",
+      "keyWidth": 10,
+    },
+
+    "break",
+
+    {
+      "type": "uptime",
+      "key": "  󰔛 up",
+      "keyColor": "#B5956A",
+      "keyWidth": 10,
+    },
+    // no packages line: fastfetch knows no Windows package manager here (winget isn't
+    // counted), it only said "No packages from known package managers found"
+
+    "break",
+
+    {
+      // the WM module says "Desktop Window Manager 10.0.19041.7417", Explorer is the desktop
+      "type": "custom",
+      "format": "Explorer",
+      "key": "  󰉼 DE",
+      "keyColor": "#A67B5B",
+      "keyWidth": 10,
+    },
+    {
+      // dark mode + accent color, the closest thing Windows has to a GTK theme
+      "type": "wmtheme",
+      "key": "  ├ ",
+      "keyColor": "#9D7050",
+      "keyWidth": 10,
+    },
+    // no icons/cursor lines: on Windows they say "Recycle Bin" and "default (32px)"
+    {
+      // fixed text: terminal detection walks the whole process tree on Windows (~210ms)
+      "type": "custom",
+      "format": "kitty",
+      "key": "  ├ ",
+      "keyColor": "#8C5E42",
+      "keyWidth": 10,
+    },
+    {
+      "type": "custom",
+      "format": "Hack (12pt)",
+      "key": "  └ ",
+      "keyColor": "#7C4D38",
+      "keyWidth": 10,
+    },
+
+    "break",
+
+    {
+      "type": "host",
+      "format": "{name:-32}",
+      "key": "  󰍹 PC",
+      "keyColor": "#D4C4A8",
+      "keyWidth": 10,
+    },
+    {
+      "type": "cpu",
+      "format": "{name} @ {freq-max}",
+      "key": "  ├ ",
+      "keyColor": "#C4A882",
+      "keyWidth": 10,
+    },
+    {
+      // the virtual display drivers (Virtual Display Driver, SudoMaker, Meta) show up as
+      // GPUs of unknown type, the real one is discrete
+      "type": "gpu",
+      "hideType": "unknown",
+      "format": "{name}",
+      "key": "  ├ ",
+      "keyColor": "#B5956A",
+      "keyWidth": 10,
+    },
+    {
+      "type": "memory",
+      "key": "  ├ ",
+      "keyColor": "#A67B5B",
+      "keyWidth": 10,
+    },
+    {
+      "type": "swap",
+      "key": "  ├ ",
+      "keyColor": "#9D7050",
+      "keyWidth": 10,
+    },
+    {
+      // only C:, the old Windows 7 partition (W:) isn't interesting
+      "type": "disk",
+      "folders": "C:\\",
+      "format": "{size-used} / {size-total} ({size-percentage})",
+      "key": "  ├ ",
+      "keyColor": "#8C5E42",
+      "keyWidth": 10,
+    },
+    {
+      "type": "sound",
+      "format": "{name}",
+      "key": "  ├ ",
+      "keyColor": "#84553C",
+      "keyWidth": 10,
+    },
+    {
+      "type": "monitor",
+      "format": "{width}x{height} @ {inch}\" {refresh-rate}Hz",
+      "key": "  └ ",
+      "keyColor": "#7C4D38",
+      "keyWidth": 10,
+    },
+
+    "break",
+    "break",
+  ],
+}
